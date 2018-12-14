@@ -21,7 +21,7 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     protected fun addFragment(containerViewId: Int, fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(containerViewId, fragment)
+        fragmentTransaction.replace(containerViewId, fragment)
         fragmentTransaction.commit()
     }
 

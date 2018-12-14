@@ -2,6 +2,6 @@ package com.kevin.musicplayer.base
 
 import android.support.v4.app.Fragment
 
-class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment() {
     //TODO
 }
