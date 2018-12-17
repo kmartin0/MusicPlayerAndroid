@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.futuremind.recyclerviewfastscroll.SectionTitleProvider
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.model.Track
 
-class TrackListAdapter(private val trackList: List<Track>) : RecyclerView.Adapter<TrackListAdapter.ViewHolder>() {
-
+class TrackListAdapter(private val trackList: List<Track>) : RecyclerView.Adapter<TrackListAdapter.ViewHolder>(), SectionTitleProvider {
 	private lateinit var context: Context
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,6 +34,11 @@ class TrackListAdapter(private val trackList: List<Track>) : RecyclerView.Adapte
 
 		holder.tvTitle.text = trackTitle
 		holder.tvArtist.text = trackArtist
+	}
+
+	override fun getSectionTitle(position: Int): String {
+		val title = trackList[position].title
+		return title!!.toUpperCase()[0].toString()
 	}
 
 	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

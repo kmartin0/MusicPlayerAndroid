@@ -24,6 +24,7 @@ class HomeFragment : BaseMVVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
 		view.rvSongList.layoutManager = layoutManager
 		view.rvSongList.adapter = trackListAdapter
+		view.fastScroller.setRecyclerView(view.rvSongList)
 		viewModel.songs.observe(this, Observer { onDataSetChanged(it) })
 	}
 

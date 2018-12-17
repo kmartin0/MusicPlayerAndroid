@@ -83,4 +83,7 @@ dependencies {
 
     // Sliding up panel
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
+
+    // Fast Scroll
+    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
 }
