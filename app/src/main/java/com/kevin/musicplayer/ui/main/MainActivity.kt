@@ -1,7 +1,11 @@
 package com.kevin.musicplayer.ui.main
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.view.MenuItem
 import android.view.View
 import com.kevin.musicplayer.R
@@ -18,6 +22,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), BottomNavigationView.OnNavigationItemSelectedListener, SlidingUpPanelLayout.PanelSlideListener {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		if (checkPermissions()) {
+			init()
+		}
+	}
+
+	private fun init() {
 		layMusicExpand.alpha = 0f
 		bottomNavBar.setOnNavigationItemSelectedListener(this)
 		addFragment(R.id.fragmentContainer, HomeFragment())
@@ -31,6 +41,36 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Bot
 			R.id.action_settings -> addFragment(R.id.fragmentContainer, SettingsFragment())
 		}
 		return true
+	}
+
+	private fun checkPermissions(): Boolean {
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+				!= PackageManager.PERMISSION_GRANTED) {
+
+
+			// No explanation needed, we can request the permission.
+			ActivityCompat.requestPermissions(this,
+					arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+					100)
+
+			return false
+		}
+		return true
+	}
+
+	override fun onRequestPermissionsResult(requestCode: Int,
+											permissions: Array<String>, grantResults: IntArray) {
+		when (requestCode) {
+			100 -> {
+				// If request is cancelled, the result arrays are empty.
+				if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+					init()
+				} else {
+					checkPermissions()
+				}
+				return
+			}
+		}
 	}
 
 	fun onAlbumClick(view: View) {
