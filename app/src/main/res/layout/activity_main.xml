@@ -27,10 +27,18 @@
             sothree:umanoPanelHeight="68dp"
             sothree:umanoShadowHeight="4dp">
 
-            <FrameLayout
-                android:id="@+id/fragmentContainer"
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <FrameLayout
+                    android:id="@+id/fragmentContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ProgressBar  style="@style/progressBar" />
+
+            </android.support.constraint.ConstraintLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
