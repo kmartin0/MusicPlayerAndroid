@@ -3,6 +3,7 @@ package com.kevin.musicplayer.ui.home
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMFragment
 import com.kevin.musicplayer.databinding.FragmentTrackListBinding
@@ -29,7 +30,7 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewMod
 
 	private fun initObservers() {
 		showLoading(true)
-		viewModel.songs.observe(this, Observer { onDataSetChanged(it); showLoading(false) })
+		viewModel.songs.observe(this, Observer { Log.i("TAGZ", "Dataset Changed!"); onDataSetChanged(it); showLoading(false) })
 	}
 
 	private fun onDataSetChanged(tracks: List<Track>?) {

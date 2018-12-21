@@ -25,6 +25,5 @@
         <item name="android:visibility">gone</item>
     </style>
 
-    <!--<item name="progressBar" type="id">progressBar</item>-->
     <item type="id" name="progressBar" />
 </resources>

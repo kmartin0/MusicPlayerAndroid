@@ -14,6 +14,7 @@ class MediaStoreHelper {
 
             // projection is an array of columns that should be included for each row retrieved.
             val projection = arrayOf(
+                    MediaStore.Audio.Media._ID,
                     MediaStore.Audio.Media.ALBUM_ID,
                     MediaStore.Audio.Media.ARTIST_ID,
                     MediaStore.Audio.Media.BOOKMARK,
