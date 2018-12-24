@@ -1,7 +1,10 @@
 package com.kevin.musicplayer.ui.home
 
 import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +18,7 @@ import com.kevin.musicplayer.model.Track
 
 class TrackListAdapter(private val trackList: List<Track>, private val onTrackClick: (Track) -> Unit) : RecyclerView.Adapter<TrackListAdapter.ViewHolder>(), SectionTitleProvider {
 	private lateinit var context: Context
+	private var currentTrack: Track? = null
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 		context = parent.context
@@ -36,6 +40,16 @@ class TrackListAdapter(private val trackList: List<Track>, private val onTrackCl
 		holder.tvTitle.text = trackTitle
 		holder.tvArtist.text = trackArtist
 		holder.clRoot.setOnClickListener { onTrackClick(trackList[position]) }
+		if (trackList[position] == currentTrack) {
+			holder.clRoot.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary))
+		} else {
+			holder.clRoot.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+		}
+
+	}
+
+	fun setCurrentTrack(track: Track?) {
+		currentTrack = track
 	}
 
 	override fun getSectionTitle(position: Int): String {

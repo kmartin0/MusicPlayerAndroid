@@ -11,6 +11,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
 
 	private var audioMediaRepository = AudioMediaRepository(application.applicationContext)
 	var songs: LiveData<List<Track>>
+	var mediaPlayerManager = MediaPlayerManager.getInstance()
 
 	init {
 		songs = audioMediaRepository.getAllTracks()

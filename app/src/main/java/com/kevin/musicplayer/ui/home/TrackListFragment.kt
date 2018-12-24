@@ -37,6 +37,10 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewMod
 	private fun initObservers() {
 		showLoading(true)
 		viewModel.songs.observe(this, Observer { Log.i("TAGZ", "Dataset Changed!"); onDataSetChanged(it); showLoading(false) })
+		viewModel.mediaPlayerManager.currentTrack.observe(this, Observer {
+			if (it == null) trackListAdapter.setCurrentTrack(null) else trackListAdapter.setCurrentTrack(it.track)
+			trackListAdapter.notifyDataSetChanged()
+		})
 	}
 
 	private fun onDataSetChanged(tracks: List<Track>?) {
