@@ -94,7 +94,7 @@ class MediaPlayerService : Service() {
 	}
 
 	private fun processStopRequest() {
-		mediaPlayerManager.mediaPlayer.reset()
+		mediaPlayerManager.reset()
 		stopSelf()
 	}
 }
