@@ -1,6 +1,7 @@
 package com.kevin.musicplayer.ui.home
 
 import android.content.Context
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,7 @@ import com.futuremind.recyclerviewfastscroll.SectionTitleProvider
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.model.Track
 
-class TrackListAdapter(private val trackList: List<Track>) : RecyclerView.Adapter<TrackListAdapter.ViewHolder>(), SectionTitleProvider {
+class TrackListAdapter(private val trackList: List<Track>, private val onTrackClick: (Track) -> Unit) : RecyclerView.Adapter<TrackListAdapter.ViewHolder>(), SectionTitleProvider {
 	private lateinit var context: Context
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,6 +35,7 @@ class TrackListAdapter(private val trackList: List<Track>) : RecyclerView.Adapte
 
 		holder.tvTitle.text = trackTitle
 		holder.tvArtist.text = trackArtist
+		holder.clRoot.setOnClickListener { onTrackClick(trackList[position]) }
 	}
 
 	override fun getSectionTitle(position: Int): String {
@@ -43,7 +45,8 @@ class TrackListAdapter(private val trackList: List<Track>) : RecyclerView.Adapte
 
 	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 		val ivAlbum: ImageView = itemView.findViewById(R.id.ivAlbum)
-		val tvTitle: TextView = itemView.findViewById(R.id.tvSong)
+		val tvTitle: TextView = itemView.findViewById(R.id.tvTrack)
 		val tvArtist: TextView = itemView.findViewById(R.id.tvArtist)
+		val clRoot: ConstraintLayout = itemView.findViewById(R.id.clRoot)
 	}
 }

@@ -15,12 +15,10 @@ class HomeFragment : BaseMVVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        DialogHelper.showToast(context!!, "Start TrackFragment")
         pagerAdapter = PagerAdapter(childFragmentManager)
         view.pager.adapter = pagerAdapter
         view.pager.offscreenPageLimit = 2
         view.tabLayout.setupWithViewPager(view.pager)
-        DialogHelper.showToast(context!!, "Stop TrackFragment")
     }
 
     override fun initViewModelBinding() {

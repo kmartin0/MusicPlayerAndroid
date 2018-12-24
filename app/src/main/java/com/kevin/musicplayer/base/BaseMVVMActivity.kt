@@ -27,4 +27,6 @@ abstract class BaseMVVMActivity<T : ViewDataBinding, V : BaseViewModel> : BaseAc
 
 	abstract fun getVMClass(): Class<V>
 
+	override fun inflateView(): Boolean = false
+
 }

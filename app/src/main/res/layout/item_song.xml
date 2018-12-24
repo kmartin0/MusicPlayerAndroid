@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/clRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
     android:padding="12dp">
 
     <ImageView
         android:id="@+id/ivAlbum"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:onClick="onAlbumClick"
         android:src="@drawable/ic_album_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvSong"
+        android:id="@+id/tvTrack"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textSize="16sp"
         android:text="Communication Breakdown"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/tvArtist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivAlbum"
@@ -43,6 +44,6 @@
         app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivAlbum"
-        app:layout_constraintTop_toBottomOf="@id/tvSong" />
+        app:layout_constraintTop_toBottomOf="@id/tvTrack" />
 
 </android.support.constraint.ConstraintLayout>

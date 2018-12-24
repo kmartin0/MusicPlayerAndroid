@@ -3,18 +3,19 @@ package com.kevin.musicplayer.base
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ProgressBar
 import com.kevin.musicplayer.R
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : FragmentActivity() {
 
 	//var progressBar: ProgressBar? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(getLayoutId())
+		if (inflateView()) setContentView(getLayoutId())
 		title = getActivityTitle()
 	}
 
@@ -38,4 +39,6 @@ abstract class BaseActivity : AppCompatActivity() {
 	abstract fun getLayoutId(): Int
 
 	abstract fun getActivityTitle(): String
+
+	protected open fun inflateView(): Boolean = true
 }

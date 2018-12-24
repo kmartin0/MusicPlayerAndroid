@@ -1,106 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/sliding_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="12dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/ivAlbum"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
-        android:layout_marginTop="68dp"
-        android:onClick="onAlbumClick"
-        android:src="@drawable/album_cover"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/tvSong"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:maxLines="1"
-        android:text="Communication Breakdown"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/tvArtist"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivAlbum"
-        app:layout_constraintVertical_chainStyle="packed" />
+        <variable
+            name="viewModel"
+            type="com.kevin.musicplayer.ui.player.MusicPlayerViewModel" />
+    </data>
 
-    <TextView
-        android:id="@+id/tvArtist"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:maxLines="1"
-        android:text="Led Zeppelin"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSong" />
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp">
 
-    <ImageView
-        android:id="@+id/ivShuffle"
-        android:layout_width="@dimen/control_icon_medium"
-        android:layout_height="@dimen/control_icon_medium"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_shuffle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/ivPrevious"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+            android:id="@+id/ivAlbum"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_marginTop="68dp"
+            android:src="@drawable/album_cover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivPause"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/ivPrevious"
-        android:layout_width="@dimen/control_icon_medium"
-        android:layout_height="@dimen/control_icon_medium"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_backward"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/ivPause"
-        app:layout_constraintStart_toEndOf="@id/ivShuffle" />
+        <TextView
+            android:id="@+id/tvTrack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="Communication Breakdown"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/tvArtist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivAlbum"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-    <ImageView
-        android:id="@+id/ivPause"
-        android:layout_width="@dimen/control_icon_medium"
-        android:layout_height="@dimen/control_icon_medium"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_play"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/ivNext"
-        app:layout_constraintStart_toEndOf="@id/ivPrevious" />
+        <TextView
+            android:id="@+id/tvArtist"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="Led Zeppelin"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTrack" />
 
-    <ImageView
-        android:id="@+id/ivNext"
-        android:layout_width="@dimen/control_icon_medium"
-        android:layout_height="@dimen/control_icon_medium"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_pause"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/ivRepeat"
-        app:layout_constraintStart_toEndOf="@id/ivPause" />
+        <ImageView
+            android:id="@+id/ivShuffle"
+            android:layout_width="@dimen/control_icon_medium"
+            android:layout_height="@dimen/control_icon_medium"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_shuffle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivPrevious"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivPlay" />
 
-    <ImageView
-        android:id="@+id/ivRepeat"
-        android:layout_width="@dimen/control_icon_medium"
-        android:layout_height="@dimen/control_icon_medium"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_repeat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ivNext" />
+        <ImageView
+            android:id="@+id/ivPrevious"
+            android:layout_width="@dimen/control_icon_medium"
+            android:layout_height="@dimen/control_icon_medium"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_backward"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivShuffle" />
 
-</android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/ivPause"
+            android:layout_width="@dimen/control_icon_medium"
+            android:layout_height="@dimen/control_icon_medium"
+            android:onClick="@{ () -> viewModel.pauseTrack() }"
+            android:src="@drawable/ic_pause"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/ivPlay"
+            app:layout_constraintEnd_toEndOf="@+id/ivPlay"
+            app:layout_constraintStart_toStartOf="@+id/ivPlay"
+            app:layout_constraintTop_toTopOf="@+id/ivPlay" />
+
+        <ImageView
+            android:id="@+id/ivPlay"
+            android:layout_width="@dimen/control_icon_medium"
+            android:layout_height="@dimen/control_icon_medium"
+            android:layout_marginBottom="10dp"
+            android:onClick="@{ () -> viewModel.resumeTrack() }"
+            android:src="@drawable/ic_play"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivShuffle"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivNext" />
+
+        <ImageView
+            android:id="@+id/ivNext"
+            android:layout_width="@dimen/control_icon_medium"
+            android:layout_height="@dimen/control_icon_medium"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_forward"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivPlay"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivRepeat" />
+
+        <ImageView
+            android:id="@+id/ivRepeat"
+            android:layout_width="@dimen/control_icon_medium"
+            android:layout_height="@dimen/control_icon_medium"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_repeat"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivNext"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

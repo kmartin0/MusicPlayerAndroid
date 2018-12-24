@@ -1,6 +1,8 @@
 package com.kevin.musicplayer.ui.home
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -8,6 +10,10 @@ import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMFragment
 import com.kevin.musicplayer.databinding.FragmentTrackListBinding
 import com.kevin.musicplayer.model.Track
+import com.kevin.musicplayer.service.MediaPlayerService
+import com.kevin.musicplayer.service.MediaPlayerService.Companion.ACTION_PLAY
+import com.kevin.musicplayer.service.MediaPlayerService.Companion.EXTRA_TRACK
+import com.kevin.musicplayer.ui.main.MainActivity
 import kotlinx.android.synthetic.main.fragment_track_list.*
 
 class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewModel>() {
@@ -22,7 +28,7 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewMod
 	}
 
 	private fun initTrackListRv() {
-		trackListAdapter = TrackListAdapter(songList)
+		trackListAdapter = TrackListAdapter(songList) { onTrackClicked(it) }
 		rvSongList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		rvSongList.adapter = trackListAdapter
 		fastScroller.setRecyclerView(rvSongList)
@@ -37,6 +43,13 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewMod
 		songList.clear()
 		tracks?.let { songList.addAll(tracks) }
 		trackListAdapter.notifyDataSetChanged()
+	}
+
+	private fun onTrackClicked(track: Track) {
+		val i = Intent(context, MediaPlayerService::class.java)
+		i.action = ACTION_PLAY
+		i.putExtra(EXTRA_TRACK, track)
+		activity?.startService(i)
 	}
 
 	override fun initViewModelBinding() {

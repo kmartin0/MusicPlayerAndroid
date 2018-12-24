@@ -19,27 +19,27 @@ class AudioMediaRepository(context: Context) {
 		trackDao = gameRoomDatabase!!.trackDao()
 	}
 
-//	/**
-//	 * @return LiveData<List<Track>> containing the Tracks on the device.
-//	 */
-//	fun getAllTracks(): LiveData<List<Track>> {
-//		val trackLiveData = MutableLiveData<List<Track>>()
-//		doAsync {
-//			val tracks = mediaStoreDatabase.getAllTracks()
-//			uiThread { trackLiveData.value = tracks }
-//		}
-//		return trackLiveData
-//	}
-
 	/**
 	 * @return LiveData<List<Track>> containing the Tracks on the device.
 	 */
 	fun getAllTracks(): LiveData<List<Track>> {
+		val trackLiveData = MutableLiveData<List<Track>>()
 		doAsync {
-			trackDao.insert(mediaStoreDatabase.getAllTracks())
+			val tracks = mediaStoreDatabase.getAllTracks()
+			uiThread { trackLiveData.value = tracks }
 		}
-		return trackDao.getTracks()
+		return trackLiveData
 	}
+
+//	/**
+//	 * @return LiveData<List<Track>> containing the Tracks on the device.
+//	 */
+//	fun getAllTracks(): LiveData<List<Track>> {
+//		doAsync {
+//			trackDao.insert(mediaStoreDatabase.getAllTracks())
+//		}
+//		return trackDao.getTracks()
+//	}
 }
 
 

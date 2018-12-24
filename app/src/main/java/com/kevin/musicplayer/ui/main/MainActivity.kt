@@ -14,9 +14,9 @@ import com.kevin.musicplayer.databinding.ActivityMainBinding
 import com.kevin.musicplayer.ui.home.TrackListFragment
 import com.kevin.musicplayer.ui.search.SearchFragment
 import com.kevin.musicplayer.ui.settings.SettingsFragment
-import com.kevin.musicplayer.util.DialogHelper
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_music_player.*
 
 
 class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), BottomNavigationView.OnNavigationItemSelectedListener, SlidingUpPanelLayout.PanelSlideListener {
@@ -29,7 +29,7 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Bot
 	}
 
 	private fun init() {
-		layMusicExpand.alpha = 0f
+		musicPlayerFragment.musicPlayerExpand.alpha = 0f
 		bottomNavBar.setOnNavigationItemSelectedListener(this)
 		addFragment(R.id.fragmentContainer, TrackListFragment())
 		slidingLayout.addPanelSlideListener(this)
@@ -79,13 +79,9 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Bot
 		}
 	}
 
-	fun onAlbumClick(view: View) {
-		DialogHelper.showToast(this, "Album Clicked")
-	}
-
 	override fun onPanelSlide(panel: View?, slideOffset: Float) {
-		layMusicSmall.alpha = 1f - slideOffset
-		layMusicExpand.alpha = slideOffset
+		musicPlayerFragment.musicPlayerSmall.alpha = 1f - slideOffset
+		musicPlayerFragment.musicPlayerExpand.alpha = slideOffset
 	}
 
 	override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
