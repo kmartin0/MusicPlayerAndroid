@@ -36,9 +36,11 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewMod
 
 	private fun initObservers() {
 		showLoading(true)
-		viewModel.songs.observe(this, Observer { Log.i("TAGZ", "Dataset Changed!"); onDataSetChanged(it); showLoading(false) })
-		viewModel.mediaPlayerManager.currentTrack.observe(this, Observer {
-			if (it == null) trackListAdapter.setCurrentTrack(null) else trackListAdapter.setCurrentTrack(it.track)
+		viewModel.songs.observe(this, Observer { onDataSetChanged(it); showLoading(false) })
+		viewModel.mediaPlayerManager.queueTracks.observe(this, Observer { queueTracks ->
+			val currentQueueTrack = queueTracks?.get(0)
+			if (currentQueueTrack == null) trackListAdapter.setCurrentTrack(null)
+			else trackListAdapter.setCurrentTrack(currentQueueTrack.track)
 			trackListAdapter.notifyDataSetChanged()
 		})
 	}
@@ -52,7 +54,7 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewMod
 	private fun onTrackClicked(track: Track) {
 		val i = Intent(context, MediaPlayerService::class.java)
 		i.action = ACTION_PLAY
-		i.putExtra(EXTRA_TRACK, track)
+		i.putExtra(EXTRA_TRACK, arrayListOf(track))
 		activity?.startService(i)
 	}
 

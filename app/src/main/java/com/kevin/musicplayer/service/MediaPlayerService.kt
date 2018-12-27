@@ -9,8 +9,8 @@ import android.os.Build
 import android.os.IBinder
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
-import android.util.Log
 import com.kevin.musicplayer.R
+import com.kevin.musicplayer.model.QueueTrack
 import com.kevin.musicplayer.model.Track
 import com.kevin.musicplayer.util.MediaPlayerManager
 
@@ -32,7 +32,6 @@ class MediaPlayerService : Service() {
 
 	override fun onCreate() {
 		super.onCreate()
-		Log.i("Servz", "Creating Service")
 		startForeground()
 	}
 
@@ -70,27 +69,23 @@ class MediaPlayerService : Service() {
 	}
 
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-		Log.i("Servz", "Service On Start Command")
 		when (intent?.action) {
-			ACTION_PLAY -> processPlayRequest(intent.getParcelableExtra(EXTRA_TRACK))
+			ACTION_PLAY -> processPlayRequest(intent.getParcelableArrayListExtra(EXTRA_TRACK))
 			ACTION_TOGGLE -> processToggleRequest()
 			ACTION_STOP -> processStopRequest()
 		}
 		return START_NOT_STICKY
 	}
 
-	private fun processPlayRequest(track: Track) {
-		mediaPlayerManager.playTrack(track)
+	private fun processPlayRequest(tracks: ArrayList<Track>) {
+		val queueTracks: ArrayList<QueueTrack> = ArrayList()
+		tracks.mapTo(queueTracks) { QueueTrack(it) }
+		mediaPlayerManager.initializeQueue(queueTracks)
+		mediaPlayerManager.playTrack()
 	}
 
 	private fun processToggleRequest() {
-		if (mediaPlayerManager.currentTrack.value != null) {
-			if (mediaPlayerManager.isPlaying()) {
-				mediaPlayerManager.pauseTrack()
-			} else {
-				mediaPlayerManager.resumeTrack()
-			}
-		}
+		mediaPlayerManager.toggle()
 	}
 
 	private fun processStopRequest() {

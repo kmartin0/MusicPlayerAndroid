@@ -11,13 +11,13 @@ class MusicPlayerViewModel(application: Application) : BaseViewModel(application
 	val pauseEvent = SingleLiveEvent<Any>()
 
 	fun resumeTrack() {
-		if (mediaPlayerManager.currentTrack.value != null) {
+		if (mediaPlayerManager.queueTracks.value != null) {
 			resumeEvent.call()
 		}
 	}
 
 	fun pauseTrack() {
-		if (mediaPlayerManager.currentTrack.value != null) {
+		if (mediaPlayerManager.queueTracks.value != null) {
 			pauseEvent.call()
 		}
 	}

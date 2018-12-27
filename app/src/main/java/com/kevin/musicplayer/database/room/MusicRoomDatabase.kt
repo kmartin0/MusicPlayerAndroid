@@ -4,11 +4,14 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
+import android.arch.persistence.room.migration.Migration
 import android.content.Context
+import com.kevin.musicplayer.dao.QueueDao
 import com.kevin.musicplayer.dao.TrackDao
+import com.kevin.musicplayer.model.QueueTrack
 import com.kevin.musicplayer.model.Track
 
-@Database(entities = [Track::class], version = 1, exportSchema = false)
+@Database(entities = [Track::class, QueueTrack::class], version = 2, exportSchema = false)
 @TypeConverters(MusicTypeConverters::class)
 abstract class MusicRoomDatabase : RoomDatabase() {
 
@@ -31,4 +34,5 @@ abstract class MusicRoomDatabase : RoomDatabase() {
 	}
 
 	abstract fun trackDao(): TrackDao
+	abstract fun queueDao(): QueueDao
 }

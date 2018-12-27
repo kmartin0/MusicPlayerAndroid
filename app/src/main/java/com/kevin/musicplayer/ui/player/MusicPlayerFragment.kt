@@ -3,7 +3,6 @@ package com.kevin.musicplayer.ui.player
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.kevin.musicplayer.R
@@ -22,29 +21,19 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	}
 
 	private fun initObservers() {
-		viewModel.mediaPlayerManager.currentTrack.observe(activity!!, Observer {
-			if (it != null) {
-				when (it.state) {
-					MusicState.Companion.MusicState.PLAYING -> onTrackChanged(it.track)
-					MusicState.Companion.MusicState.PAUSING -> showPlayButton()
+		viewModel.mediaPlayerManager.queueTracks.observe(activity!!, Observer { queueTracks ->
+			if (queueTracks != null && queueTracks.isNotEmpty()) {
+				val currentQueueTrack = queueTracks[0]
+				when (currentQueueTrack.state) {
+					MusicState.PLAYING -> showPlayingState(currentQueueTrack.track)
+					MusicState.PAUSING -> showPausingState(currentQueueTrack.track)
 				}
 			} else {
-				onTrackChanged(null)
+				showEmptyState()
 			}
 		})
 		viewModel.resumeEvent.observe(activity!!, Observer { toggleIntent() })
 		viewModel.pauseEvent.observe(activity!!, Observer { toggleIntent() })
-	}
-
-	private fun onTrackChanged(track: Track?) {
-		if (track == null) {
-			showEmptyState()
-		} else {
-			if (track.album == null) setAlbumView(null) else setAlbumView(track.album!!.art)
-			setTrackTitleView(track.title)
-			setArtistView(track.artist?.name)
-			showPauseButton()
-		}
 	}
 
 	private fun toggleIntent() {
@@ -53,15 +42,34 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 		activity?.startService(i)
 	}
 
-	private fun showEmptyState() {
+	private fun showPlayingState(track: Track) {
+		populatePlayerView(track)
+		showPauseButton()
+	}
+
+	private fun showPausingState(track: Track) {
+		populatePlayerView(track)
 		showPlayButton()
-		setAlbumView(null)
-		setArtistView(null)
-		setTrackTitleView("Empty Queue")
+	}
+
+	private fun showEmptyState() {
+		populatePlayerView(null)
+		showPlayButton()
+	}
+
+	private fun populatePlayerView(track: Track?) {
+		if (track != null) {
+			if (track.album == null) setAlbumView(null) else setAlbumView(track.album!!.art)
+			setTrackTitleView(track.title)
+			setArtistView(track.artist?.name)
+		} else {
+			setAlbumView(null)
+			setArtistView(null)
+			setTrackTitleView("Empty Queue")
+		}
 	}
 
 	private fun showPauseButton() {
-		Log.i("Servz", "Playing State")
 		musicPlayerSmall.ivPause.visibility = View.VISIBLE
 		musicPlayerExpand.ivPause.visibility = View.VISIBLE
 
@@ -70,7 +78,6 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	}
 
 	private fun showPlayButton() {
-		Log.i("Servz", "Pausing State")
 		musicPlayerSmall.ivPause.visibility = View.INVISIBLE
 		musicPlayerExpand.ivPause.visibility = View.INVISIBLE
 
