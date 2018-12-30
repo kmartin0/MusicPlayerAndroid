@@ -1,11 +1,12 @@
 package com.kevin.musicplayer.ui.home
 
 import android.content.Context
-import android.graphics.Color
-import android.os.Build
 import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaMetadataCompat
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,12 @@ import com.futuremind.recyclerviewfastscroll.SectionTitleProvider
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.model.Track
 
-class TrackListAdapter(private val trackList: List<Track>, private val onTrackClick: (Track) -> Unit) : RecyclerView.Adapter<TrackListAdapter.ViewHolder>(), SectionTitleProvider {
+class TrackListAdapter(private val trackList: List<MediaBrowserCompat.MediaItem>,
+					   private val onTrackClick: (MediaBrowserCompat.MediaItem) -> Unit)
+	: RecyclerView.Adapter<TrackListAdapter.ViewHolder>(), SectionTitleProvider {
+
 	private lateinit var context: Context
-	private var currentTrack: Track? = null
+	private var currentTrack: MediaBrowserCompat.MediaItem? = null
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 		context = parent.context
@@ -30,9 +34,9 @@ class TrackListAdapter(private val trackList: List<Track>, private val onTrackCl
 	}
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		val albumUri = trackList[position].album?.art
-		val trackTitle = trackList[position].title
-		val trackArtist = trackList[position].artist?.name
+		val albumUri = trackList[position].description.extras?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART)
+		val trackTitle = trackList[position].description.title?.toString()
+		val trackArtist = trackList[position].description.description?.toString()
 
 		if (albumUri != null) Glide.with(context).load(albumUri).into(holder.ivAlbum)
 		else Glide.with(context).load(R.drawable.ic_album_placeholder).into(holder.ivAlbum)
@@ -48,13 +52,13 @@ class TrackListAdapter(private val trackList: List<Track>, private val onTrackCl
 
 	}
 
-	fun setCurrentTrack(track: Track?) {
+	fun setCurrentTrack(track: MediaBrowserCompat.MediaItem?) {
 		currentTrack = track
 	}
 
-	override fun getSectionTitle(position: Int): String {
-		val title = trackList[position].title
-		return title!!.toUpperCase()[0].toString()
+	override fun getSectionTitle(position: Int): String? {
+		val title = trackList[position].description.title?.toString()
+		return if (title != null) title.toUpperCase()[0].toString() else null
 	}
 
 	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

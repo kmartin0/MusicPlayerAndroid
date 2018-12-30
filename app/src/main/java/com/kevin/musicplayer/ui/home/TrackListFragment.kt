@@ -1,30 +1,27 @@
 package com.kevin.musicplayer.ui.home
 
 import android.arch.lifecycle.Observer
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.support.v4.media.MediaBrowserCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMFragment
 import com.kevin.musicplayer.databinding.FragmentTrackListBinding
-import com.kevin.musicplayer.model.Track
-import com.kevin.musicplayer.service.MediaPlayerService
-import com.kevin.musicplayer.service.MediaPlayerService.Companion.ACTION_PLAY
-import com.kevin.musicplayer.service.MediaPlayerService.Companion.EXTRA_TRACK
-import com.kevin.musicplayer.ui.main.MainActivity
 import kotlinx.android.synthetic.main.fragment_track_list.*
 
 class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewModel>() {
 
 	private lateinit var trackListAdapter: TrackListAdapter
-	private val songList = ArrayList<Track>()
+	private val songList = ArrayList<MediaBrowserCompat.MediaItem>()
 
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
 		initTrackListRv()
 		initObservers()
+	}
+
+	private fun initObservers() {
+		viewModel.trackList.observe(this, Observer { onDataSetChanged(it) })
 	}
 
 	private fun initTrackListRv() {
@@ -34,28 +31,14 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewMod
 		fastScroller.setRecyclerView(rvSongList)
 	}
 
-	private fun initObservers() {
-		showLoading(true)
-		viewModel.songs.observe(this, Observer { onDataSetChanged(it); showLoading(false) })
-		viewModel.mediaPlayerManager.queueTracks.observe(this, Observer { queueTracks ->
-			val currentQueueTrack = queueTracks?.get(0)
-			if (currentQueueTrack == null) trackListAdapter.setCurrentTrack(null)
-			else trackListAdapter.setCurrentTrack(currentQueueTrack.track)
-			trackListAdapter.notifyDataSetChanged()
-		})
-	}
-
-	private fun onDataSetChanged(tracks: List<Track>?) {
+	private fun onDataSetChanged(tracks: List<MediaBrowserCompat.MediaItem>?) {
 		songList.clear()
 		tracks?.let { songList.addAll(tracks) }
 		trackListAdapter.notifyDataSetChanged()
 	}
 
-	private fun onTrackClicked(track: Track) {
-		val i = Intent(context, MediaPlayerService::class.java)
-		i.action = ACTION_PLAY
-		i.putExtra(EXTRA_TRACK, arrayListOf(track))
-		activity?.startService(i)
+	private fun onTrackClicked(track: MediaBrowserCompat.MediaItem) {
+		viewModel.play(track)
 	}
 
 	override fun initViewModelBinding() {

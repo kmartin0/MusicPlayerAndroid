@@ -1,31 +1,31 @@
 package com.kevin.musicplayer.service
 
+import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Intent
-import android.media.AudioAttributes
-import android.media.AudioAttributes.CONTENT_TYPE_MUSIC
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import com.kevin.musicplayer.R
 import com.kevin.musicplayer.database.mediastore.MediaStoreDatabase
-import com.kevin.musicplayer.util.NOW_PLAYING_NOTIFICATION
-import com.kevin.musicplayer.util.NotificationBuilder
+import com.kevin.musicplayer.util.*
 
 
 private const val MY_MEDIA_ROOT_ID = "media_root_id"
-const val LOG_TAG = "TAGZ"
+const val LOG_TAG = "MusicServiceZ"
 
 class MusicService : MediaBrowserServiceCompat() {
 
-	private var mMediaSession: MediaSessionCompat? = null
-	private var mediaPlayer: MediaPlayer? = null
+	private lateinit var mediaSession: MediaSessionCompat
 	private lateinit var mStateBuilder: PlaybackStateCompat.Builder
 	private lateinit var notificationManager: NotificationManagerCompat
 	private lateinit var notificationBuilder: NotificationBuilder
@@ -33,21 +33,13 @@ class MusicService : MediaBrowserServiceCompat() {
 	override fun onCreate() {
 		super.onCreate()
 		Log.i(LOG_TAG, "onCreateService")
-		initMediaPlayer()
 		initMediaSession()
 		initNotification()
 	}
 
-
-	private fun initMediaPlayer() {
-		mediaPlayer = MediaPlayer()
-		//	mediaPlayer!!.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK)
-		mediaPlayer!!.setAudioAttributes(AudioAttributes.Builder().setFlags(CONTENT_TYPE_MUSIC).build())
-	}
-
 	private fun initMediaSession() {
 		// Create a MediaSessionCompat
-		mMediaSession = MediaSessionCompat(baseContext, LOG_TAG).apply {
+		mediaSession = MediaSessionCompat(this, LOG_TAG).apply {
 
 			// Enable callbacks from MediaButtons and TransportControls
 			setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
@@ -68,6 +60,7 @@ class MusicService : MediaBrowserServiceCompat() {
 			// Set the session's token so that client activities can communicate with it.
 			setSessionToken(sessionToken)
 		}
+
 	}
 
 	private fun initNotification() {
@@ -138,24 +131,26 @@ class MusicService : MediaBrowserServiceCompat() {
 	private val mySessionCallback = object : MediaSessionCompat.Callback() {
 
 		private val queue = ArrayList<MediaDescriptionCompat>()
+		private var isPaused = false
 
 		override fun onPause() {
 			super.onPause()
 			Log.i(LOG_TAG, "onPause")
+			MediaPlayerManager.getInstance().pause()
+			mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PAUSED)
+			isPaused = true
 		}
 
 		override fun onPlay() {
 			super.onPlay()
 			Log.i(LOG_TAG, "onPlay")
-			if (mMediaSession != null) {
-				if (queue.isNotEmpty()) {
-
+			if (queue.isNotEmpty()) {
+				if (isPaused) {
+					MediaPlayerManager.getInstance().play()
+					mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PLAYING)
+				} else {
 					val toPlay = queue[0]
-
-					mediaPlayer!!.reset()
-					mediaPlayer!!.setDataSource(this@MusicService, toPlay.mediaUri!!)
-					mediaPlayer!!.prepare()
-					mediaPlayer!!.start()
+					MediaPlayerManager.getInstance().playMediaItem(toPlay.mediaUri.toString())
 
 					val metaData = MediaMetadataCompat.Builder()
 							.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, toPlay.mediaId)
@@ -166,12 +161,14 @@ class MusicService : MediaBrowserServiceCompat() {
 							.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, toPlay.mediaUri.toString())
 							.build()
 
-					mMediaSession!!.setMetadata(metaData)
-					val notification = notificationBuilder.buildNotification(mMediaSession!!.sessionToken)
+					mediaSession.setMetadata(metaData)
+					mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PLAYING)
+					val notification = notificationBuilder.buildNotification(mediaSession.sessionToken)
 
 					startService(Intent(applicationContext, this@MusicService.javaClass))
 					startForeground(NOW_PLAYING_NOTIFICATION, notification)
 				}
+				isPaused = false
 			}
 		}
 

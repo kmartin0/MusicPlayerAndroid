@@ -1,19 +1,18 @@
 package com.kevin.musicplayer.ui.home
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
+import android.support.v4.media.MediaBrowserCompat
 import com.kevin.musicplayer.base.BaseViewModel
-import com.kevin.musicplayer.model.Track
-import com.kevin.musicplayer.repository.AudioMediaRepository
-import com.kevin.musicplayer.util.MediaPlayerManager
+import com.kevin.musicplayer.util.MediaSessionConnection
 
 class HomeViewModel(application: Application) : BaseViewModel(application) {
 
-	private var audioMediaRepository = AudioMediaRepository(application.applicationContext)
-	var songs: LiveData<List<Track>>
-	var mediaPlayerManager = MediaPlayerManager.getInstance()
+	private val mediaSessionConnection = MediaSessionConnection.getInstance(application.applicationContext)
+	val trackList = mediaSessionConnection.mediaItems
 
-	init {
-		songs = audioMediaRepository.getAllTracks()
+	fun play(mediaItem: MediaBrowserCompat.MediaItem) {
+		mediaSessionConnection.mediaController.addQueueItem(mediaItem.description)
+		mediaSessionConnection.transportControls.play()
 	}
+
 }
