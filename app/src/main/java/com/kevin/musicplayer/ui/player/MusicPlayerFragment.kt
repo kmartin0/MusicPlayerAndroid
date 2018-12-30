@@ -1,17 +1,21 @@
 package com.kevin.musicplayer.ui.player
 
 import android.arch.lifecycle.Observer
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMFragment
 import com.kevin.musicplayer.databinding.FragmentMusicPlayerBinding
+import com.kevin.musicplayer.util.BitmapHelper
 import kotlinx.android.synthetic.main.fragment_music_player.*
 import kotlinx.android.synthetic.main.music_player_small.view.*
+
 
 class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPlayerViewModel>() {
 
@@ -42,12 +46,20 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 
 	private fun setTrackState(metadata: MediaMetadataCompat) {
 		val albumArt = metadata.bundle.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
+
 		if (albumArt.isNullOrEmpty()) {
 			Glide.with(context!!).load(R.drawable.ic_album_placeholder).into(musicPlayerSmall.ivAlbum)
 			Glide.with(context!!).load(R.drawable.ic_album_placeholder).into(musicPlayerExpand.ivAlbum)
+
+			val bitmap = BitmapHelper.colorToBitmap(R.color.darkGrey)
+
+			view?.setBackgroundColor(ContextCompat.getColor(context!!, R.color.darkGrey))
 		} else {
 			Glide.with(context!!).load(albumArt).into(musicPlayerSmall.ivAlbum)
 			Glide.with(context!!).load(albumArt).into(musicPlayerExpand.ivAlbum)
+
+			val blurredAlbumArt = BitmapHelper.blurBitmap(context!!, BitmapFactory.decodeFile(albumArt))
+			view?.background = BitmapDrawable(resources, blurredAlbumArt)
 		}
 
 		musicPlayerSmall.tvTrack.text = metadata.description.title
