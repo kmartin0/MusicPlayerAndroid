@@ -1,19 +1,24 @@
 package com.kevin.musicplayer.database.mediastore
 
 import android.content.Context
+import android.net.Uri
+import android.os.Bundle
 import android.provider.MediaStore
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaDescriptionCompat
+import android.support.v4.media.MediaMetadataCompat
 import com.kevin.musicplayer.model.Album
 import com.kevin.musicplayer.model.Artist
 import com.kevin.musicplayer.model.Track
 
 class MediaStoreDatabase(private val context: Context) {
 
-	fun getAllTracks(): List<Track> {
+	fun getAllTracks(): List<MediaBrowserCompat.MediaItem> {
 		val tracksCursor = MediaStoreHelper.getTracksCursor(context)
 
 		val artistList = getAllArtists()
 		val albumList = getAllAlbums()
-		val trackList = ArrayList<Track>()
+		val trackList = ArrayList<MediaBrowserCompat.MediaItem>()
 
 		if (tracksCursor != null && tracksCursor.moveToFirst() && tracksCursor.count > 0) {
 			while (!tracksCursor.isAfterLast) {
@@ -21,22 +26,19 @@ class MediaStoreDatabase(private val context: Context) {
 				val album = albumList.find { album -> album.id == tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)) }
 				val artist = artistList.find { artist -> artist.id == tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)) }
 
-				val track = Track(
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media._ID)),
-						album,
-						artist,
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.BOOKMARK)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.TRACK)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.YEAR)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.DATA)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.SIZE)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
-				)
-				trackList.add(track)
+				val extras = Bundle()
+				extras.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, album?.art)
+
+				val desc = MediaDescriptionCompat.Builder()
+						.setMediaId(tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media._ID)))
+						.setTitle(tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)))
+						.setSubtitle(artist?.name)
+						.setDescription(album?.title)
+						.setExtras(extras)
+						.setMediaUri(Uri.parse(tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.DATA))))
+						.build()
+
+				trackList.add(MediaBrowserCompat.MediaItem(desc, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
 				tracksCursor.moveToNext()
 			}
 			tracksCursor.close()
@@ -49,7 +51,7 @@ class MediaStoreDatabase(private val context: Context) {
 
 		val artistList = getAllArtists()
 		val albumList = getAllAlbums()
-		var littleWing : Track? = null
+		var littleWing: Track? = null
 
 		if (tracksCursor != null && tracksCursor.moveToFirst() && tracksCursor.count > 0) {
 			while (!tracksCursor.isAfterLast) {

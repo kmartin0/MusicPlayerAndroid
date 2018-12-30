@@ -59,6 +59,7 @@
             android:layout_height="@dimen/control_icon_small"
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_backward"
+            android:onClick="@{ () -> viewModel.skipToPrevious() }"
             app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
             app:layout_constraintEnd_toStartOf="@id/ivPause"
             app:layout_constraintTop_toTopOf="parent" />
@@ -90,6 +91,7 @@
             android:id="@+id/ivNext"
             android:layout_width="@dimen/control_icon_small"
             android:layout_height="@dimen/control_icon_small"
+            android:onClick="@{ () -> viewModel.skipToNext() }"
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_forward"
             app:layout_constraintBottom_toBottomOf="@id/ivAlbum"

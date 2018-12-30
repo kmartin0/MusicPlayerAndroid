@@ -9,9 +9,13 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
 
 	private val mediaSessionConnection = MediaSessionConnection.getInstance(application.applicationContext)
 	val trackList = mediaSessionConnection.mediaItems
+	val currentTrack = mediaSessionConnection.currentTrack
 
 	fun play(mediaItem: MediaBrowserCompat.MediaItem) {
-		mediaSessionConnection.mediaController.addQueueItem(mediaItem.description)
+		mediaSessionConnection.transportControls.stop()
+		trackList.value?.forEach { mediaSessionConnection.mediaController.addQueueItem(it.description) }
+		val queueIndex = trackList.value!!.indexOf(mediaItem).toLong()
+		mediaSessionConnection.transportControls.skipToQueueItem(queueIndex)
 		mediaSessionConnection.transportControls.play()
 	}
 

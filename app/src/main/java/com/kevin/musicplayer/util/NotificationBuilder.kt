@@ -3,6 +3,7 @@ package com.kevin.musicplayer.util
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
 import android.support.annotation.RequiresApi
@@ -36,7 +37,6 @@ class NotificationBuilder(private val context: Context) {
 		val playbackState = controller.playbackState
 
 		val builder = NotificationCompat.Builder(context, NOW_PLAYING_CHANNEL)
-
 
 		val mediaStyle = android.support.v4.media.app.NotificationCompat.MediaStyle()
 				.setCancelButtonIntent(stopPendingIntent)

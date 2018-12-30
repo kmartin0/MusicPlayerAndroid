@@ -22,14 +22,14 @@ class AudioMediaRepository(context: Context) {
 	/**
 	 * @return LiveData<List<Track>> containing the Tracks on the device.
 	 */
-	fun getAllTracks(): LiveData<List<Track>> {
-		val trackLiveData = MutableLiveData<List<Track>>()
-		doAsync {
-			val tracks = mediaStoreDatabase.getAllTracks()
-			uiThread { trackLiveData.value = tracks }
-		}
-		return trackLiveData
-	}
+//	fun getAllTracks(): LiveData<List<Track>> {
+//		val trackLiveData = MutableLiveData<List<Track>>()
+//		doAsync {
+//			val tracks = mediaStoreDatabase.getAllTracks()
+//			uiThread { trackLiveData.value = tracks }
+//		}
+//		return trackLiveData
+//	}
 
 //	/**
 //	 * @return LiveData<List<Track>> containing the Tracks on the device.

@@ -11,10 +11,20 @@ class MusicPlayerViewModel(application: Application) : BaseViewModel(application
 	val playBackState = mediaSessionConnection.playBackState
 
 	fun resumeTrack() {
-		mediaSessionConnection.transportControls.play()
+		mediaSessionConnection.transportControls.sendCustomAction("ACTION_TOGGLE", null)
 	}
 
 	fun pauseTrack() {
-		mediaSessionConnection.transportControls.pause()
+		mediaSessionConnection.transportControls.sendCustomAction("ACTION_TOGGLE", null)
+	}
+
+	fun skipToNext() {
+		mediaSessionConnection.transportControls.skipToNext()
+		mediaSessionConnection.transportControls.play()
+	}
+
+	fun skipToPrevious() {
+		mediaSessionConnection.transportControls.skipToPrevious()
+		mediaSessionConnection.transportControls.play()
 	}
 }

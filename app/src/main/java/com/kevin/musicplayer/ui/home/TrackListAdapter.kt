@@ -22,7 +22,7 @@ class TrackListAdapter(private val trackList: List<MediaBrowserCompat.MediaItem>
 	: RecyclerView.Adapter<TrackListAdapter.ViewHolder>(), SectionTitleProvider {
 
 	private lateinit var context: Context
-	private var currentTrack: MediaBrowserCompat.MediaItem? = null
+	private var currentTrackId: String? = null
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 		context = parent.context
@@ -34,7 +34,7 @@ class TrackListAdapter(private val trackList: List<MediaBrowserCompat.MediaItem>
 	}
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		val albumUri = trackList[position].description.extras?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART)
+		val albumUri = trackList[position].description.extras?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
 		val trackTitle = trackList[position].description.title?.toString()
 		val trackArtist = trackList[position].description.description?.toString()
 
@@ -44,16 +44,16 @@ class TrackListAdapter(private val trackList: List<MediaBrowserCompat.MediaItem>
 		holder.tvTitle.text = trackTitle
 		holder.tvArtist.text = trackArtist
 		holder.clRoot.setOnClickListener { onTrackClick(trackList[position]) }
-		if (trackList[position] == currentTrack) {
+		if (trackList[position].description.mediaId == currentTrackId) {
 			holder.clRoot.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary))
 		} else {
 			holder.clRoot.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
 		}
-
 	}
 
-	fun setCurrentTrack(track: MediaBrowserCompat.MediaItem?) {
-		currentTrack = track
+	fun setCurrentTrack(track: MediaMetadataCompat?) {
+		currentTrackId = track?.description?.mediaId
+		notifyDataSetChanged()
 	}
 
 	override fun getSectionTitle(position: Int): String? {

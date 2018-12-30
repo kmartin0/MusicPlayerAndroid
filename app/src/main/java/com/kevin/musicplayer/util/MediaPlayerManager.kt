@@ -1,6 +1,7 @@
 package com.kevin.musicplayer.util
 
 import android.media.MediaPlayer
+import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 
 // TODO: Handle incoming calls, headphone remove, different audio focus.
@@ -34,15 +35,31 @@ class MediaPlayerManager : MediaPlayer.OnCompletionListener {
 		mediaPlayer?.pause()
 	}
 
+	fun toggle(): PlaybackStateCompat? {
+		mediaPlayer?.let {
+			return if (it.isPlaying) {
+				pause()
+				PlaybackStateHelper.STATE_PAUSED
+			} else {
+				play()
+				PlaybackStateHelper.STATE_PLAYING
+			}
+		}
+		return null
+	}
 
 	private fun createMediaPlayer() {
-		mediaPlayer?.release()
+		reset()
 		mediaPlayer = MediaPlayer()
 		mediaPlayer!!.setOnCompletionListener(this)
 	}
 
 	override fun onCompletion(mp: MediaPlayer?) {
 		Log.i("TAGZ", "Song completed")
+		reset()
+	}
+
+	fun reset() {
 		mediaPlayer?.release()
 		mediaPlayer = null
 	}

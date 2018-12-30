@@ -61,26 +61,40 @@
             app:layout_constraintTop_toBottomOf="@id/tvTrack" />
 
         <ImageView
-            android:id="@+id/ivShuffle"
-            android:layout_width="@dimen/control_icon_medium"
-            android:layout_height="@dimen/control_icon_medium"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_shuffle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ivPrevious"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/ivPlay" />
-
-        <ImageView
             android:id="@+id/ivPrevious"
-            android:layout_width="@dimen/control_icon_medium"
+            android:layout_width="117dp"
             android:layout_height="@dimen/control_icon_medium"
             android:layout_marginBottom="10dp"
             android:src="@drawable/ic_backward"
+            android:onClick="@{ () -> viewModel.skipToPrevious() }"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivPlay"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivPlay"
+            android:layout_width="117dp"
+            android:layout_height="@dimen/control_icon_medium"
+            android:layout_marginBottom="10dp"
+            android:onClick="@{ () -> viewModel.resumeTrack() }"
+            android:src="@drawable/ic_play"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivNext"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivPrevious" />
+
+        <ImageView
+            android:id="@+id/ivNext"
+            android:layout_width="118dp"
+            android:layout_height="@dimen/control_icon_medium"
+            android:layout_marginBottom="10dp"
+            android:onClick="@{ () -> viewModel.skipToNext() }"
+            android:src="@drawable/ic_forward"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/ivShuffle" />
+            app:layout_constraintStart_toEndOf="@+id/ivPlay" />
 
         <ImageView
             android:id="@+id/ivPause"
@@ -93,40 +107,6 @@
             app:layout_constraintEnd_toEndOf="@+id/ivPlay"
             app:layout_constraintStart_toStartOf="@+id/ivPlay"
             app:layout_constraintTop_toTopOf="@+id/ivPlay" />
-
-        <ImageView
-            android:id="@+id/ivPlay"
-            android:layout_width="@dimen/control_icon_medium"
-            android:layout_height="@dimen/control_icon_medium"
-            android:layout_marginBottom="10dp"
-            android:onClick="@{ () -> viewModel.resumeTrack() }"
-            android:src="@drawable/ic_play"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ivShuffle"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/ivNext" />
-
-        <ImageView
-            android:id="@+id/ivNext"
-            android:layout_width="@dimen/control_icon_medium"
-            android:layout_height="@dimen/control_icon_medium"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_forward"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ivPlay"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/ivRepeat" />
-
-        <ImageView
-            android:id="@+id/ivRepeat"
-            android:layout_width="@dimen/control_icon_medium"
-            android:layout_height="@dimen/control_icon_medium"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_repeat"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ivNext"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

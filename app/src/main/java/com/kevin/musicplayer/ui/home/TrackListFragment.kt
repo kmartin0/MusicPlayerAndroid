@@ -22,6 +22,7 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewMod
 
 	private fun initObservers() {
 		viewModel.trackList.observe(this, Observer { onDataSetChanged(it) })
+		viewModel.currentTrack.observe(this, Observer { trackListAdapter.setCurrentTrack(it) })
 	}
 
 	private fun initTrackListRv() {

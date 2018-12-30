@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.kevin.musicplayer.R
@@ -40,8 +41,14 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	}
 
 	private fun setTrackState(metadata: MediaMetadataCompat) {
-		Glide.with(context!!).load(metadata.bundle.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)).into(musicPlayerSmall.ivAlbum)
-		Glide.with(context!!).load(metadata.bundle.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)).into(musicPlayerExpand.ivAlbum)
+		val albumArt = metadata.bundle.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
+		if (albumArt.isNullOrEmpty()) {
+			Glide.with(context!!).load(R.drawable.ic_album_placeholder).into(musicPlayerSmall.ivAlbum)
+			Glide.with(context!!).load(R.drawable.ic_album_placeholder).into(musicPlayerExpand.ivAlbum)
+		} else {
+			Glide.with(context!!).load(albumArt).into(musicPlayerSmall.ivAlbum)
+			Glide.with(context!!).load(albumArt).into(musicPlayerExpand.ivAlbum)
+		}
 
 		musicPlayerSmall.tvTrack.text = metadata.description.title
 		musicPlayerExpand.tvTrack.text = metadata.description.title
