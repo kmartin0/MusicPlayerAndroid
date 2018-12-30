@@ -3,6 +3,7 @@ package com.kevin.musicplayer.util
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.media.MediaPlayer
+import android.net.Uri
 import android.util.Log
 import com.kevin.musicplayer.model.MusicState
 import com.kevin.musicplayer.model.QueueTrack
@@ -34,14 +35,14 @@ class MediaPlayerManager : MediaPlayer.OnCompletionListener {
 		this.queueTracks.value = ArrayList(queueTracks)
 	}
 
-	fun playTrack() {
-		queueTracks.value?.let { queueTracks ->
+	fun playTrack(uri : String) {
+	//	queueTracks.value?.let { queueTracks ->
 			mediaPlayer.reset()
-			mediaPlayer.setDataSource(queueTracks[0].track.data)
+			mediaPlayer.setDataSource(uri)
 			mediaPlayer.prepare()
 			mediaPlayer.start()
-			updateCurrentTrackState(MusicState.PLAYING)
-		}
+		//	updateCurrentTrackState(MusicState.PLAYING)
+//		}
 	}
 
 	fun toggle() {

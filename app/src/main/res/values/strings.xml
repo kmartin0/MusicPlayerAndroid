@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">MusicPlayer</string>
+
+    <string name="notification_skip_to_previous">Previous</string>
+    <string name="notification_play">Play</string>
+    <string name="notification_pause">Pause</string>
+    <string name="notification_skip_to_next">Next</string>
+    <string name="notification_channel">notification channel</string>
+    <string name="notification_channel_description">notification channel description</string>
+
+    notification_channel_description
+
+
 </resources>

@@ -36,6 +36,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
+                <Button
+                    android:id="@+id/testButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Test Service" />
+
                 <ProgressBar style="@style/progressBar" />
 
             </android.support.constraint.ConstraintLayout>
@@ -44,9 +50,9 @@
                 android:id="@+id/musicPlayerFragment"
                 android:name="com.kevin.musicplayer.ui.player.MusicPlayerFragment"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:clickable="true"
-                android:focusable="true"
-                android:layout_height="match_parent" />
+                android:focusable="true" />
 
 
         </com.sothree.slidinguppanel.SlidingUpPanelLayout>

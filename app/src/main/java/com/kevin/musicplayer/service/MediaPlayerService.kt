@@ -81,7 +81,6 @@ class MediaPlayerService : Service() {
 		val queueTracks: ArrayList<QueueTrack> = ArrayList()
 		tracks.mapTo(queueTracks) { QueueTrack(it) }
 		mediaPlayerManager.initializeQueue(queueTracks)
-		mediaPlayerManager.playTrack()
 	}
 
 	private fun processToggleRequest() {

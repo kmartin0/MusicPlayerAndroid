@@ -1,16 +1,22 @@
 package com.kevin.musicplayer.ui.main
 
 import android.Manifest
+import android.content.ComponentName
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.session.MediaControllerCompat
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMActivity
 import com.kevin.musicplayer.databinding.ActivityMainBinding
+import com.kevin.musicplayer.service.MusicService
 import com.kevin.musicplayer.ui.home.TrackListFragment
 import com.kevin.musicplayer.ui.search.SearchFragment
 import com.kevin.musicplayer.ui.settings.SettingsFragment
@@ -20,6 +26,8 @@ import kotlinx.android.synthetic.main.fragment_music_player.*
 
 
 class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), BottomNavigationView.OnNavigationItemSelectedListener, SlidingUpPanelLayout.PanelSlideListener {
+
+
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -97,5 +105,4 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Bot
 	override fun initViewModelBinding() {
 		binding.viewModel = viewModel
 	}
-
 }
