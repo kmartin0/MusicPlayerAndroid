@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="control_icon_large">40dp</dimen>
+    <dimen name="control_icon_large">60dp</dimen>
+    <dimen name="control_icon_medium_large">30dp</dimen>
     <dimen name="control_icon_medium">20dp</dimen>
     <dimen name="control_icon_small">15dp</dimen>
+    <dimen name="padding_small">6dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
 </resources>

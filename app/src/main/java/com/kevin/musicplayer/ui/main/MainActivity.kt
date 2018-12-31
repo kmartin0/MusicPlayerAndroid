@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_music_player.*
 
 
-class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), BottomNavigationView.OnNavigationItemSelectedListener, SlidingUpPanelLayout.PanelSlideListener {
+class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), SlidingUpPanelLayout.PanelSlideListener {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -37,23 +37,8 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Bot
 
 	private fun init() {
 		musicPlayerFragment.musicPlayerExpand.alpha = 0f
-		bottomNavBar.setOnNavigationItemSelectedListener(this)
 		addFragment(R.id.fragmentContainer, TrackListFragment())
 		slidingLayout.addPanelSlideListener(this)
-	}
-
-	override fun onNavigationItemSelected(item: MenuItem): Boolean {
-		when (item.itemId) {
-			R.id.action_home -> if (R.id.action_home != bottomNavBar.selectedItemId)
-				addFragment(R.id.fragmentContainer, TrackListFragment())
-
-			R.id.action_search -> if (R.id.action_search != bottomNavBar.selectedItemId)
-				addFragment(R.id.fragmentContainer, SearchFragment())
-
-			R.id.action_settings -> if (R.id.action_settings != bottomNavBar.selectedItemId)
-				addFragment(R.id.fragmentContainer, SettingsFragment())
-		}
-		return true
 	}
 
 	private fun checkPermissions(): Boolean {

@@ -14,7 +14,8 @@
         android:id="@+id/clRootMainActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/darkGrey">
+        android:background="@color/darkGrey"
+        android:fitsSystemWindows="true">
 
         <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -22,10 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="bottom"
-            app:layout_constraintBottom_toTopOf="@id/bottomNavBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            sothree:layout_constraintBottom_toBottomOf="parent"
             sothree:umanoPanelHeight="68dp"
             sothree:umanoShadowHeight="4dp">
 
@@ -53,15 +54,6 @@
 
 
         </com.sothree.slidinguppanel.SlidingUpPanelLayout>
-
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bottomNavBar"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/red"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:menu="@menu/navigation_items" />
-
     </android.support.constraint.ConstraintLayout>
 </layout>
 

@@ -17,15 +17,12 @@
 
     <TextView
         android:id="@+id/tvTrack"
+        style="@style/largeWhiteText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/white"
         android:text="Communication Breakdown"
-        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/tvArtist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivAlbum"
@@ -34,15 +31,12 @@
 
     <TextView
         android:id="@+id/tvArtist"
+        style="@style/mediumWhiteText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:textColor="@color/white"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:text="Led Zeppelin"
-        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivAlbum"
