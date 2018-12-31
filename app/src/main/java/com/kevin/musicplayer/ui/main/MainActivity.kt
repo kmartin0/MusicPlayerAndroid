@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -26,8 +27,6 @@ import kotlinx.android.synthetic.main.fragment_music_player.*
 
 
 class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), BottomNavigationView.OnNavigationItemSelectedListener, SlidingUpPanelLayout.PanelSlideListener {
-
-
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -71,6 +70,8 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Bot
 		}
 		return true
 	}
+
+	fun getRootView() : ConstraintLayout = clRootMainActivity
 
 	override fun onRequestPermissionsResult(requestCode: Int,
 											permissions: Array<String>, grantResults: IntArray) {

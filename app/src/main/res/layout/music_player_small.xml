@@ -19,7 +19,7 @@
             android:id="@+id/ivAlbum"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_album_placeholder"
+            android:src="@drawable/ic_disc"
             app:layout_constraintEnd_toStartOf="@id/tvTrack"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,6 +36,7 @@
             app:layout_constraintBottom_toTopOf="@id/tvArtist"
             app:layout_constraintEnd_toStartOf="@id/ivPrevious"
             app:layout_constraintStart_toEndOf="@id/ivAlbum"
+            android:textColor="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
@@ -46,6 +47,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:ellipsize="end"
+            android:textColor="@color/white"
             android:maxLines="1"
             android:textSize="8sp"
             app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
@@ -61,6 +63,7 @@
             android:src="@drawable/ic_backward"
             android:onClick="@{ () -> viewModel.skipToPrevious() }"
             app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
+            android:tint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/ivPause"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,6 +74,7 @@
             android:layout_marginEnd="20dp"
             android:onClick="@{ () -> viewModel.pauseTrack() }"
             android:src="@drawable/ic_pause"
+            android:tint="@color/white"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
             app:layout_constraintEnd_toStartOf="@id/ivNext"
@@ -81,6 +85,7 @@
             android:layout_width="@dimen/control_icon_small"
             android:layout_height="@dimen/control_icon_small"
             android:layout_marginEnd="20dp"
+            android:tint="@color/white"
             android:onClick="@{ () -> viewModel.resumeTrack() }"
             android:src="@drawable/ic_play"
             app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
@@ -89,6 +94,7 @@
 
         <ImageView
             android:id="@+id/ivNext"
+            android:tint="@color/white"
             android:layout_width="@dimen/control_icon_small"
             android:layout_height="@dimen/control_icon_small"
             android:onClick="@{ () -> viewModel.skipToNext() }"

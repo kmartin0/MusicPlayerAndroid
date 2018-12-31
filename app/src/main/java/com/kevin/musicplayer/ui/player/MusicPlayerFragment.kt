@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMFragment
 import com.kevin.musicplayer.databinding.FragmentMusicPlayerBinding
+import com.kevin.musicplayer.ui.main.MainActivity
 import com.kevin.musicplayer.util.BitmapHelper
 import kotlinx.android.synthetic.main.fragment_music_player.*
 import kotlinx.android.synthetic.main.music_player_small.view.*
@@ -34,8 +35,8 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	}
 
 	private fun setEmptyState() {
-		Glide.with(context!!).load(R.drawable.ic_album_placeholder).into(musicPlayerSmall.ivAlbum)
-		Glide.with(context!!).load(R.drawable.ic_album_placeholder).into(musicPlayerExpand.ivAlbum)
+		Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerSmall.ivAlbum)
+		Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerExpand.ivAlbum)
 
 		musicPlayerSmall.tvTrack.text = "Empty Queue"
 		musicPlayerExpand.tvTrack.text = "Empty Queue"
@@ -48,18 +49,22 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 		val albumArt = metadata.bundle.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
 
 		if (albumArt.isNullOrEmpty()) {
-			Glide.with(context!!).load(R.drawable.ic_album_placeholder).into(musicPlayerSmall.ivAlbum)
-			Glide.with(context!!).load(R.drawable.ic_album_placeholder).into(musicPlayerExpand.ivAlbum)
-
-			val bitmap = BitmapHelper.colorToBitmap(R.color.darkGrey)
+			Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerSmall.ivAlbum)
+			Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerExpand.ivAlbum)
 
 			view?.setBackgroundColor(ContextCompat.getColor(context!!, R.color.darkGrey))
+			if (activity is MainActivity) {
+				(activity as MainActivity).getRootView().setBackgroundColor(ContextCompat.getColor(context!!, R.color.darkGrey))
+			}
 		} else {
 			Glide.with(context!!).load(albumArt).into(musicPlayerSmall.ivAlbum)
 			Glide.with(context!!).load(albumArt).into(musicPlayerExpand.ivAlbum)
 
 			val blurredAlbumArt = BitmapHelper.blurBitmap(context!!, BitmapFactory.decodeFile(albumArt))
 			view?.background = BitmapDrawable(resources, blurredAlbumArt)
+			if (activity is MainActivity) {
+				(activity as MainActivity).getRootView().background = BitmapDrawable(resources, blurredAlbumArt)
+			}
 		}
 
 		musicPlayerSmall.tvTrack.text = metadata.description.title

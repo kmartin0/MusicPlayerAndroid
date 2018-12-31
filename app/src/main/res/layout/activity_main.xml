@@ -11,8 +11,10 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/clRootMainActivity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/darkGrey">
 
         <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -45,6 +47,7 @@
                 android:name="com.kevin.musicplayer.ui.player.MusicPlayerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/darkGrey"
                 android:clickable="true"
                 android:focusable="true" />
 

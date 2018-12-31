@@ -39,7 +39,7 @@ class TrackListAdapter(private val trackList: List<MediaBrowserCompat.MediaItem>
 		val trackArtist = trackList[position].description.description?.toString()
 
 		if (albumUri != null) Glide.with(context).load(albumUri).into(holder.ivAlbum)
-		else Glide.with(context).load(R.drawable.ic_album_placeholder).into(holder.ivAlbum)
+		else Glide.with(context).load(R.drawable.ic_disc).into(holder.ivAlbum)
 
 		holder.tvTitle.text = trackTitle
 		holder.tvArtist.text = trackArtist
@@ -47,7 +47,7 @@ class TrackListAdapter(private val trackList: List<MediaBrowserCompat.MediaItem>
 		if (trackList[position].description.mediaId == currentTrackId) {
 			holder.clRoot.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary))
 		} else {
-			holder.clRoot.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+			holder.clRoot.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent))
 		}
 	}
 

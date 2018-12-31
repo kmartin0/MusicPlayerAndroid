@@ -13,7 +13,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 
 
-private const val BITMAP_SCALE = 0.4f
+private const val BITMAP_SCALE = .1f
 private const val BLUR_RADIUS = 25f
 
 class BitmapHelper {

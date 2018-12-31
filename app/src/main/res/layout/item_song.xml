@@ -4,14 +4,14 @@
     android:id="@+id/clRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
+    android:background="@color/darkGrey"
     android:padding="12dp">
 
     <ImageView
         android:id="@+id/ivAlbum"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/ic_album_placeholder"
+        android:src="@drawable/ic_disc"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,6 +23,7 @@
         android:layout_marginEnd="20dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textColor="@color/white"
         android:text="Communication Breakdown"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/tvArtist"
@@ -37,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:textColor="@color/white"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Led Zeppelin"
