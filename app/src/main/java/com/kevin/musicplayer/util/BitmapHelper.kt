@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.renderscript.Element
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 
 
 private const val BITMAP_SCALE = .1f
@@ -19,25 +20,21 @@ private const val BLUR_RADIUS = 25f
 class BitmapHelper {
 
 	companion object {
-		fun blurBitmap(context: Context, image: Bitmap?): Bitmap? {
-			var outputBitmap: Bitmap? = null
+		fun blurBitmap(context: Context, image: Bitmap): Bitmap {
+			val width = Math.round(image.width * BITMAP_SCALE)
+			val height = Math.round(image.height * BITMAP_SCALE)
 
-			if (image != null) {
-				val width = Math.round(image.width * BITMAP_SCALE)
-				val height = Math.round(image.height * BITMAP_SCALE)
+			val inputBitmap = Bitmap.createScaledBitmap(image, width, height, false)
+			val outputBitmap = Bitmap.createBitmap(inputBitmap)
 
-				val inputBitmap = Bitmap.createScaledBitmap(image, width, height, false)
-				outputBitmap = Bitmap.createBitmap(inputBitmap)
-
-				val rs = RenderScript.create(context)
-				val theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
-				val tmpIn = Allocation.createFromBitmap(rs, inputBitmap)
-				val tmpOut = Allocation.createFromBitmap(rs, outputBitmap)
-				theIntrinsic.setRadius(BLUR_RADIUS)
-				theIntrinsic.setInput(tmpIn)
-				theIntrinsic.forEach(tmpOut)
-				tmpOut.copyTo(outputBitmap)
-			}
+			val rs = RenderScript.create(context)
+			val theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
+			val tmpIn = Allocation.createFromBitmap(rs, inputBitmap)
+			val tmpOut = Allocation.createFromBitmap(rs, outputBitmap)
+			theIntrinsic.setRadius(BLUR_RADIUS)
+			theIntrinsic.setInput(tmpIn)
+			theIntrinsic.forEach(tmpOut)
+			tmpOut.copyTo(outputBitmap)
 
 			return outputBitmap
 		}
@@ -65,6 +62,12 @@ class BitmapHelper {
 			return Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888).also {
 				Canvas(it).apply { drawColor(color) }
 			}
+		}
+
+		fun gradientFromBitmap(bitmap: Bitmap): GradientDrawable {
+			val gradient1 = bitmap.getPixel(bitmap.width / 4, bitmap.height / 4)
+			val gradient2 = bitmap.getPixel(bitmap.width - (bitmap.width / 4), bitmap.height - (bitmap.height / 4))
+			return GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(gradient1, gradient2))
 		}
 	}
 }

@@ -52,7 +52,11 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 			Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerSmall.ivAlbum)
 			Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerExpand.ivAlbum)
 
-			view?.setBackgroundColor(ContextCompat.getColor(context!!, R.color.darkGrey))
+			ContextCompat.getColor(context!!, R.color.darkGrey).also {
+				view?.setBackgroundColor(it)
+				musicPlayerSmall.backGroundLine.setBackgroundColor(it)
+			}
+
 			if (activity is MainActivity) {
 				(activity as MainActivity).getRootView().setBackgroundColor(ContextCompat.getColor(context!!, R.color.darkGrey))
 			}
@@ -62,6 +66,7 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 
 			val blurredAlbumArt = BitmapHelper.blurBitmap(context!!, BitmapFactory.decodeFile(albumArt))
 			view?.background = BitmapDrawable(resources, blurredAlbumArt)
+			musicPlayerSmall.backGroundLine.background = BitmapHelper.gradientFromBitmap(blurredAlbumArt)
 			if (activity is MainActivity) {
 				(activity as MainActivity).getRootView().background = BitmapDrawable(resources, blurredAlbumArt)
 			}
