@@ -29,7 +29,7 @@ abstract class BaseActivity : FragmentActivity() {
 	 * @param containerViewId The container view to where add the fragment.
 	 * @param fragment The fragment to be added.
 	 */
-	protected fun addFragment(containerViewId: Int, fragment: Fragment) {
+	fun addFragment(containerViewId: Int, fragment: Fragment) {
 		val fragmentTransaction = supportFragmentManager.beginTransaction()
 		fragmentTransaction.replace(containerViewId, fragment)
 		fragmentTransaction.commit()

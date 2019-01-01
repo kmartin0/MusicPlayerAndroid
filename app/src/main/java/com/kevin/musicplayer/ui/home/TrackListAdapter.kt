@@ -36,7 +36,7 @@ class TrackListAdapter(private val trackList: List<MediaBrowserCompat.MediaItem>
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val albumUri = trackList[position].description.extras?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
 		val trackTitle = trackList[position].description.title?.toString()
-		val trackArtist = trackList[position].description.description?.toString()
+		val trackArtist = trackList[position].description.subtitle?.toString()
 
 		if (albumUri != null) Glide.with(context).load(albumUri).into(holder.ivAlbum)
 		else Glide.with(context).load(R.drawable.ic_disc).into(holder.ivAlbum)

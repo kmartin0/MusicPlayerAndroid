@@ -52,7 +52,6 @@
                 android:clickable="true"
                 android:focusable="true" />
 
-
         </com.sothree.slidinguppanel.SlidingUpPanelLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>
