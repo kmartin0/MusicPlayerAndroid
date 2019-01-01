@@ -5,5 +5,5 @@
     <dimen name="control_icon_medium">20dp</dimen>
     <dimen name="control_icon_small">15dp</dimen>
     <dimen name="padding_small">6dp</dimen>
-    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_medium">14dp</dimen>
 </resources>

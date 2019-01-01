@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
+import com.kevin.musicplayer.dao.LyricsDao
 import com.kevin.musicplayer.model.Lyrics
 
 @Database(entities = [Lyrics::class], version = 2, exportSchema = false)
@@ -28,5 +29,7 @@ abstract class MusicRoomDatabase : RoomDatabase() {
 			return gameRoomDatabaseInstance
 		}
 	}
+
+	abstract fun lyricsDao(): LyricsDao
 
 }

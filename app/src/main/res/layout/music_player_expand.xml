@@ -103,10 +103,13 @@
 
         <ImageView
             android:id="@+id/ivLyrics"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_heart"
-            app:layout_constraintBottom_toTopOf="@id/ivPrevious"/>
+            style="@style/largeControlButton"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_lyrics"
+            app:layout_constraintBottom_toTopOf="@+id/ivPause"
+            app:layout_constraintEnd_toEndOf="@+id/ivPause"
+            app:layout_constraintStart_toStartOf="@+id/ivPause"
+            app:layout_constraintTop_toBottomOf="@id/tvArtist" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>
