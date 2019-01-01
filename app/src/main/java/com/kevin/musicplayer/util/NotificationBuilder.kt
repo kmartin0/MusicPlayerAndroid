@@ -3,7 +3,9 @@ package com.kevin.musicplayer.util
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -18,9 +20,11 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import com.kevin.musicplayer.R
+import com.kevin.musicplayer.ui.main.MainActivity
 
 const val NOW_PLAYING_CHANNEL: String = "com.kevin.musicplayer.NOW_PLAYING"
 const val NOW_PLAYING_NOTIFICATION: Int = 0xb339
+const val REQUEST_CODE: Int = 501
 
 /**
  * Helper class to encapsulate code for building notifications.
@@ -77,7 +81,7 @@ class NotificationBuilder(private val context: Context) {
 		}
 		builder.addAction(skipToNextAction)
 
-		return builder.setContentIntent(controller.sessionActivity)
+		return builder.setContentIntent(createContentIntent())
 				.setContentTitle(description.title)
 				.setContentText(description.description)
 				.setDeleteIntent(stopPendingIntent)
@@ -93,6 +97,13 @@ class NotificationBuilder(private val context: Context) {
 		return if (albumUri != null)
 			BitmapFactory.decodeFile(albumUri)
 		else BitmapHelper.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_disc)!!)
+	}
+
+	private fun createContentIntent(): PendingIntent {
+		val openUI = Intent(context, MainActivity::class.java)
+		openUI.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+		return PendingIntent.getActivity(
+				context, REQUEST_CODE, openUI, PendingIntent.FLAG_CANCEL_CURRENT)
 	}
 
 	private fun shouldCreateNowPlayingChannel() =
