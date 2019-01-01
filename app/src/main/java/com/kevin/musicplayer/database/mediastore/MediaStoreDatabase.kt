@@ -9,7 +9,6 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import com.kevin.musicplayer.model.Album
 import com.kevin.musicplayer.model.Artist
-import com.kevin.musicplayer.model.Track
 
 class MediaStoreDatabase(private val context: Context) {
 
@@ -44,42 +43,6 @@ class MediaStoreDatabase(private val context: Context) {
 			tracksCursor.close()
 		}
 		return trackList
-	}
-
-	fun getLittleWing(): Track? {
-		val tracksCursor = MediaStoreHelper.getLittleWingCursor(context)
-
-		val artistList = getAllArtists()
-		val albumList = getAllAlbums()
-		var littleWing: Track? = null
-
-		if (tracksCursor != null && tracksCursor.moveToFirst() && tracksCursor.count > 0) {
-			while (!tracksCursor.isAfterLast) {
-
-				val album = albumList.find { album -> album.id == tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)) }
-				val artist = artistList.find { artist -> artist.id == tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)) }
-
-				val track = Track(
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media._ID)),
-						album,
-						artist,
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.BOOKMARK)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.TRACK)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.YEAR)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.DATA)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.SIZE)),
-						tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
-				)
-				littleWing = track
-				tracksCursor.moveToNext()
-			}
-			tracksCursor.close()
-		}
-		return littleWing
 	}
 
 	fun getAllArtists(): List<Artist> {

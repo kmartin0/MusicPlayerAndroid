@@ -43,7 +43,7 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 		setAlbumIconView(null)
 		setBackgroundView(null)
 		setArtistView("")
-		setTitleView("Empty Queue")
+		setTitleView(getString(R.string.empty_queue))
 	}
 
 	private fun setTrackState(metadata: MediaMetadataCompat) {
@@ -119,8 +119,8 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	private fun navigateToLyrics() {
 		viewModel.currentTrack.value?.let {
 			val intent = Intent(context!!, LyricsActivity::class.java)
-			intent.putExtra("EXTRA_ARTIST", it.description.subtitle)
-			intent.putExtra("EXTRA_TITLE", it.description.title)
+			intent.putExtra(LyricsActivity.EXTRA_ARTIST, it.description.subtitle)
+			intent.putExtra(LyricsActivity.EXTRA_TITLE, it.description.title)
 			(activity!! as BaseActivity).startActivity(intent)
 		}
 	}

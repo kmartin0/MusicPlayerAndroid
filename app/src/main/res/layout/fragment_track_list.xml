@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.kevin.musicplayer.ui.home.HomeViewModel" />
+            type="com.kevin.musicplayer.ui.tracklist.TrackListViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -1,26 +1,16 @@
 package com.kevin.musicplayer.ui.main
 
 import android.Manifest
-import android.content.ComponentName
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
-import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.session.MediaControllerCompat
-import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMActivity
 import com.kevin.musicplayer.databinding.ActivityMainBinding
-import com.kevin.musicplayer.service.MusicService
-import com.kevin.musicplayer.ui.home.TrackListFragment
-import com.kevin.musicplayer.ui.search.SearchFragment
-import com.kevin.musicplayer.ui.settings.SettingsFragment
+import com.kevin.musicplayer.ui.tracklist.TrackListFragment
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_music_player.*

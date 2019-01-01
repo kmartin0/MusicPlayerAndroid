@@ -27,29 +27,4 @@ class MusicTypeConverters {
 		val type = object : TypeToken<Artist>() {}.type
 		return Gson().fromJson(value, type)
 	}
-
-	@TypeConverter
-	fun fromTrack(track: Track?): String {
-		return Gson().toJson(track)
-	}
-
-	@TypeConverter
-	fun toTrack(value: String): Track {
-		val type = object : TypeToken<Track>() {}.type
-		return Gson().fromJson(value, type)
-	}
-
-	@TypeConverter
-	fun fromMusicState(musicState: MusicState): String {
-		return musicState.toString()
-	}
-
-	@TypeConverter
-	fun toMusicState(value: String): MusicState {
-		return when (value) {
-			MusicState.PAUSING.toString() -> MusicState.PAUSING
-			MusicState.PLAYING.toString() -> MusicState.PLAYING
-			else -> MusicState.PAUSING
-		}
-	}
 }

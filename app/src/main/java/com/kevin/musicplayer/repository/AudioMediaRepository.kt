@@ -1,22 +1,16 @@
 package com.kevin.musicplayer.repository
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.content.Context
-import com.kevin.musicplayer.dao.TrackDao
 import com.kevin.musicplayer.database.mediastore.MediaStoreDatabase
 import com.kevin.musicplayer.database.room.MusicRoomDatabase
-import com.kevin.musicplayer.model.Track
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 class AudioMediaRepository(context: Context) {
 	private val mediaStoreDatabase = MediaStoreDatabase(context)
-	private var trackDao: TrackDao
+//	private var trackDao: TrackDao
 
 	init {
 		val gameRoomDatabase = MusicRoomDatabase.getDatabase(context)
-		trackDao = gameRoomDatabase!!.trackDao()
+//		trackDao = gameRoomDatabase!!.trackDao()
 	}
 
 	/**

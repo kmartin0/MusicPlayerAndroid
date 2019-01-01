@@ -11,8 +11,6 @@ import com.kevin.musicplayer.R
 
 abstract class BaseActivity : FragmentActivity() {
 
-	//var progressBar: ProgressBar? = null
-
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		if (inflateView()) setContentView(getLayoutId())

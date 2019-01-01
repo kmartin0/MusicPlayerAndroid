@@ -1,4 +1,4 @@
-package com.kevin.musicplayer.ui.home
+package com.kevin.musicplayer.ui.tracklist
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
@@ -9,7 +9,7 @@ import com.kevin.musicplayer.base.BaseMVVMFragment
 import com.kevin.musicplayer.databinding.FragmentTrackListBinding
 import kotlinx.android.synthetic.main.fragment_track_list.*
 
-class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewModel>() {
+class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, TrackListViewModel>() {
 
 	private lateinit var trackListAdapter: TrackListAdapter
 	private val songList = ArrayList<MediaBrowserCompat.MediaItem>()
@@ -46,7 +46,7 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, HomeViewMod
 		binding.viewModel = viewModel
 	}
 
-	override fun getVMClass(): Class<HomeViewModel> = HomeViewModel::class.java
+	override fun getVMClass(): Class<TrackListViewModel> = TrackListViewModel::class.java
 
 	override fun getLayoutId(): Int = R.layout.fragment_track_list
 
