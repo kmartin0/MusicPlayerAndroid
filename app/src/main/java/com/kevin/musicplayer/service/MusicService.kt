@@ -1,6 +1,5 @@
 package com.kevin.musicplayer.service
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.media.MediaBrowserCompat
@@ -8,7 +7,6 @@ import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import com.kevin.musicplayer.database.mediastore.MediaStoreDatabase
 import com.kevin.musicplayer.util.MediaPlayerManager
@@ -23,13 +21,12 @@ const val LOG_TAG = "MusicServiceZ"
 class MusicService : MediaBrowserServiceCompat() {
 
 	private lateinit var mediaSession: MediaSessionCompat
-	private lateinit var mStateBuilder: PlaybackStateCompat.Builder
 	private lateinit var notificationManager: NotificationManagerCompat
 	private lateinit var notificationBuilder: NotificationBuilder
 
 	override fun onCreate() {
 		super.onCreate()
-		Log.i(LOG_TAG, "onCreateService")
+		Log.i(LOG_TAG, "onCreate")
 		initMediaSession()
 		initNotification()
 	}
@@ -39,17 +36,13 @@ class MusicService : MediaBrowserServiceCompat() {
 		mediaSession = MediaSessionCompat(this, LOG_TAG).apply {
 
 			// Enable callbacks from MediaButtons and TransportControls
-			setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
-					or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
+			setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
 					or MediaSessionCompat.FLAG_HANDLES_QUEUE_COMMANDS
+					or MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
 			)
 
 			// Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player
-			mStateBuilder = PlaybackStateCompat.Builder()
-					.setActions(PlaybackStateCompat.ACTION_PLAY
-							or PlaybackStateCompat.ACTION_PLAY_PAUSE
-					)
-			setPlaybackState(mStateBuilder.build())
+			setPlaybackState(PlaybackStateHelper.STATE_STOPPED)
 
 			// MySessionCallback() has methods that handle callbacks from a media controller
 			setCallback(mySessionCallback)
@@ -65,7 +58,6 @@ class MusicService : MediaBrowserServiceCompat() {
 		notificationManager = NotificationManagerCompat.from(this)
 	}
 
-
 	override fun onGetRoot(
 			clientPackageName: String,
 			clientUid: Int,
@@ -79,6 +71,7 @@ class MusicService : MediaBrowserServiceCompat() {
 			parentMediaId: String,
 			result: MediaBrowserServiceCompat.Result<List<MediaBrowserCompat.MediaItem>>
 	) {
+		Log.i(LOG_TAG, "onLoadChildren")
 		if (MY_MEDIA_ROOT_ID == parentMediaId) {
 			result.sendResult(MediaStoreDatabase(this).getAllTracks())
 		} else {
@@ -95,68 +88,79 @@ class MusicService : MediaBrowserServiceCompat() {
 			Log.i(LOG_TAG, "onPause")
 			MediaPlayerManager.getInstance().pause()
 			mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PAUSED)
+			stopForeground(false)
+			notificationManager.notify(NOW_PLAYING_NOTIFICATION, notificationBuilder.buildNotification(mediaSession.sessionToken))
 		}
 
 		override fun onPlay() {
 			Log.i(LOG_TAG, "onPlay")
 			if (queue.isNotEmpty()) {
 				val toPlay = queue[currentQueueIndex]
-				MediaPlayerManager.getInstance().playMediaItem(toPlay.mediaUri.toString())
+				if (mediaSession.controller.metadata?.description?.mediaId == toPlay.mediaId) {
+					MediaPlayerManager.getInstance().resume()
+					mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PLAYING)
+					notificationManager.notify(NOW_PLAYING_NOTIFICATION, notificationBuilder.buildNotification(mediaSession.sessionToken))
+				} else {
+					MediaPlayerManager.getInstance().playMediaItem(toPlay.mediaUri.toString())
 
-				val metaData = MediaMetadataCompat.Builder()
-						.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, toPlay.mediaId)
-						.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, toPlay.title.toString())
-						.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, toPlay.subtitle.toString())
-						.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, toPlay.description.toString())
-						.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, toPlay.extras?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI))
-						.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, toPlay.mediaUri.toString())
-						.build()
+					val metaData = MediaMetadataCompat.Builder()
+							.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, toPlay.mediaId)
+							.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, toPlay.title.toString())
+							.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, toPlay.subtitle.toString())
+							.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, toPlay.description.toString())
+							.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, toPlay.extras?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI))
+							.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, toPlay.mediaUri.toString())
+							.build()
 
-				mediaSession.setMetadata(metaData)
-				mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PLAYING)
-				val notification = notificationBuilder.buildNotification(mediaSession.sessionToken)
+					mediaSession.setMetadata(metaData)
+					mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PLAYING)
+					val notification = notificationBuilder.buildNotification(mediaSession.sessionToken)
 
-				startService(Intent(applicationContext, this@MusicService.javaClass))
-				startForeground(NOW_PLAYING_NOTIFICATION, notification)
+					startForeground(NOW_PLAYING_NOTIFICATION, notification)
+				}
 			}
 		}
 
 		override fun onSkipToNext() {
+			Log.i(LOG_TAG, "onSkipToNext")
 			if (queue.isNotEmpty()) {
 				if (currentQueueIndex == queue.size - 1) {
 					currentQueueIndex = 0
 				} else {
 					currentQueueIndex++
 				}
-			}
-		}
-
-		override fun onCustomAction(action: String?, extras: Bundle?) {
-			if (action == "ACTION_TOGGLE") {
-				val newState = MediaPlayerManager.getInstance().toggle()
-				if (newState != null) mediaSession.setPlaybackState(newState)
+				onPlay()
 			}
 		}
 
 		override fun onSkipToPrevious() {
+			Log.i(LOG_TAG, "onSkipToPrevious")
 			if (queue.isNotEmpty()) {
 				if (currentQueueIndex == 0) {
 					currentQueueIndex = queue.size - 1
 				} else {
 					currentQueueIndex--
 				}
+				onPlay()
 			}
 		}
 
 		override fun onSkipToQueueItem(id: Long) {
+			Log.i(LOG_TAG, "onSkipToQueueItem")
 			currentQueueIndex = id.toInt()
 		}
 
 		override fun onStop() {
+			Log.i(LOG_TAG, "onStop")
 			MediaPlayerManager.getInstance().reset()
+			mediaSession.setPlaybackState(PlaybackStateHelper.STATE_STOPPED)
+			queue.clear()
+			currentQueueIndex = 0
+			mediaSession.setMetadata(null)
 		}
 
 		override fun onAddQueueItem(description: MediaDescriptionCompat?) {
+			Log.i(LOG_TAG, "onAddQueueItem")
 			if (description != null) queue.add(description)
 		}
 	}

@@ -20,8 +20,8 @@ class MediaSessionConnection(context: Context) {
 		get() = mediaController.transportControls
 
 	val isConnected = MutableLiveData<Boolean>().apply { postValue(false) }
-	val playBackState = MutableLiveData<PlaybackStateCompat>().apply { postValue(EMPTY_PLAYBACK_STATE) }
-	val currentTrack = MutableLiveData<MediaMetadataCompat>().apply { postValue(NOTHING_PLAYING) }
+	val playBackState = MutableLiveData<PlaybackStateCompat>()
+	val currentTrack = MutableLiveData<MediaMetadataCompat>()
 	val mediaItems = MutableLiveData<List<MediaBrowserCompat.MediaItem>>()
 
 	private val mediaBrowser = MediaBrowserCompat(context,
@@ -37,7 +37,6 @@ class MediaSessionConnection(context: Context) {
 			Log.i(LOG_TAG, "onConnected")
 			mediaController = MediaControllerCompat(context, mediaBrowser.sessionToken).apply {
 				registerCallback(MediaControllerCallback())
-
 			}
 		}
 
@@ -67,7 +66,6 @@ class MediaSessionConnection(context: Context) {
 	}
 
 	inner class MediaControllerCallback : MediaControllerCompat.Callback() {
-
 		override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
 			Log.i(LOG_TAG, "onPlaybackStateChanged $state")
 			playBackState.postValue(state)
@@ -90,16 +88,5 @@ class MediaSessionConnection(context: Context) {
 							.also { instance = it }
 				}
 	}
-
-	@Suppress("PropertyName")
-	val EMPTY_PLAYBACK_STATE: PlaybackStateCompat = PlaybackStateCompat.Builder()
-			.setState(PlaybackStateCompat.STATE_NONE, 0, 0f)
-			.build()
-
-	@Suppress("PropertyName")
-	val NOTHING_PLAYING: MediaMetadataCompat = MediaMetadataCompat.Builder()
-			.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "")
-			.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, 0)
-			.build()
 }
 

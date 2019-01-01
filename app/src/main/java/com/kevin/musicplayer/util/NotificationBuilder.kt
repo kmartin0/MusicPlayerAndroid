@@ -3,15 +3,20 @@ package com.kevin.musicplayer.util
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.app.NotificationCompat.MediaStyle
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import com.kevin.musicplayer.R
 
 const val NOW_PLAYING_CHANNEL: String = "com.kevin.musicplayer.NOW_PLAYING"
@@ -27,6 +32,26 @@ class NotificationBuilder(private val context: Context) {
 	private val stopPendingIntent =
 			MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_STOP)
 
+	private val pauseAction = NotificationCompat.Action(
+			android.R.drawable.ic_media_pause,
+			"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(
+			context, PlaybackStateCompat.ACTION_PAUSE))
+
+	private val playAction = NotificationCompat.Action(
+			android.R.drawable.ic_media_play,
+			"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(
+			context, PlaybackStateCompat.ACTION_PLAY))
+
+	private val skipToNextAction = NotificationCompat.Action(
+			android.R.drawable.ic_media_next,
+			"Next", MediaButtonReceiver.buildMediaButtonPendingIntent(
+			context, PlaybackStateCompat.ACTION_SKIP_TO_NEXT))
+
+	private val skipToPreviousAction = NotificationCompat.Action(
+			android.R.drawable.ic_media_previous,
+			"Next", MediaButtonReceiver.buildMediaButtonPendingIntent(
+			context, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS))
+
 	fun buildNotification(sessionToken: MediaSessionCompat.Token): Notification {
 		if (shouldCreateNowPlayingChannel()) {
 			createNowPlayingChannel()
@@ -35,26 +60,39 @@ class NotificationBuilder(private val context: Context) {
 		val controller = MediaControllerCompat(context, sessionToken)
 		val description = controller.metadata.description
 		val playbackState = controller.playbackState
+		val albumUri = controller.metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
 
 		val builder = NotificationCompat.Builder(context, NOW_PLAYING_CHANNEL)
 
-		val mediaStyle = android.support.v4.media.app.NotificationCompat.MediaStyle()
+		val mediaStyle = MediaStyle()
 				.setCancelButtonIntent(stopPendingIntent)
 				.setMediaSession(sessionToken)
-				.setShowActionsInCompactView(0)
+				.setShowActionsInCompactView(0, 1, 2)
 				.setShowCancelButton(true)
 
+		builder.addAction(skipToPreviousAction)
+		when (playbackState.state) {
+			PlaybackStateCompat.STATE_PAUSED -> builder.addAction(playAction)
+			PlaybackStateCompat.STATE_PLAYING -> builder.addAction(pauseAction)
+		}
+		builder.addAction(skipToNextAction)
+
 		return builder.setContentIntent(controller.sessionActivity)
-				.setContentText(description.subtitle)
 				.setContentTitle(description.title)
+				.setContentText(description.description)
 				.setDeleteIntent(stopPendingIntent)
-				.setLargeIcon(description.iconBitmap)
 				.setOnlyAlertOnce(true)
 				.setSmallIcon(R.drawable.ic_play)
+				.setLargeIcon(getLargeIcon(albumUri))
 				.setStyle(mediaStyle)
 				.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-				.addAction(NotificationCompat.Action(android.R.drawable.ic_media_pause, "Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PAUSE)))
 				.build()
+	}
+
+	private fun getLargeIcon(albumUri: String?): Bitmap {
+		return if (albumUri != null)
+			BitmapFactory.decodeFile(albumUri)
+		else BitmapHelper.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_disc)!!)
 	}
 
 	private fun shouldCreateNowPlayingChannel() =

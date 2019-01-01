@@ -48,6 +48,10 @@ class MediaPlayerManager : MediaPlayer.OnCompletionListener {
 		return null
 	}
 
+	fun resume() {
+		mediaPlayer?.start()
+	}
+
 	private fun createMediaPlayer() {
 		reset()
 		mediaPlayer = MediaPlayer()

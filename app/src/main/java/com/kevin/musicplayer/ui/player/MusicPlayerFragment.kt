@@ -35,55 +35,36 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	}
 
 	private fun setEmptyState() {
-		Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerSmall.ivAlbum)
-		Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerExpand.ivAlbum)
-
-		musicPlayerSmall.tvTrack.text = "Empty Queue"
-		musicPlayerExpand.tvTrack.text = "Empty Queue"
-
-		musicPlayerSmall.tvArtist.text = ""
-		musicPlayerExpand.tvArtist.text = ""
+		setAlbumIconView(null)
+		setBackgroundView(null)
+		setArtistView("")
+		setTitleView("Empty Queue")
 	}
 
 	private fun setTrackState(metadata: MediaMetadataCompat) {
-		val albumArt = metadata.bundle.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
-
-		if (albumArt.isNullOrEmpty()) {
-			Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerSmall.ivAlbum)
-			Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerExpand.ivAlbum)
-
-			ContextCompat.getColor(context!!, R.color.darkGrey).also {
-				view?.setBackgroundColor(it)
-				musicPlayerSmall.backGroundLine.setBackgroundColor(it)
-			}
-
-			if (activity is MainActivity) {
-				(activity as MainActivity).getRootView().setBackgroundColor(ContextCompat.getColor(context!!, R.color.darkGrey))
-			}
-		} else {
-			Glide.with(context!!).load(albumArt).into(musicPlayerSmall.ivAlbum)
-			Glide.with(context!!).load(albumArt).into(musicPlayerExpand.ivAlbum)
-
-			val blurredAlbumArt = BitmapHelper.blurBitmap(context!!, BitmapFactory.decodeFile(albumArt))
-			view?.background = BitmapDrawable(resources, blurredAlbumArt)
-			musicPlayerSmall.backGroundLine.background = BitmapHelper.gradientFromBitmap(blurredAlbumArt)
-			if (activity is MainActivity) {
-				(activity as MainActivity).getRootView().background = BitmapDrawable(resources, blurredAlbumArt)
-			}
-		}
-
-		musicPlayerSmall.tvTrack.text = metadata.description.title
-		musicPlayerExpand.tvTrack.text = metadata.description.title
-
-		musicPlayerSmall.tvArtist.text = metadata.description.description
-		musicPlayerExpand.tvArtist.text = metadata.description.description
+		val albumArtUri = metadata.bundle.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
+		setBackgroundView(albumArtUri)
+		setAlbumIconView(albumArtUri)
+		setArtistView(metadata.description.description.toString())
+		setTitleView(metadata.description.title.toString())
 	}
 
 	private fun setControlButtons(state: Int?) {
 		when (state) {
 			PlaybackStateCompat.STATE_PLAYING -> enablePauseButton()
 			PlaybackStateCompat.STATE_PAUSED -> enablePlayButton()
+			PlaybackStateCompat.STATE_STOPPED -> setEmptyState()
 		}
+	}
+
+	private fun setArtistView(artist: String) {
+		musicPlayerSmall.tvArtist.text = artist
+		musicPlayerExpand.tvArtist.text = artist
+	}
+
+	private fun setTitleView(title: String) {
+		musicPlayerSmall.tvTrack.text = title
+		musicPlayerExpand.tvTrack.text = title
 	}
 
 	private fun enablePlayButton() {
@@ -100,6 +81,34 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 
 		musicPlayerSmall.ivPlay.visibility = View.INVISIBLE
 		musicPlayerExpand.ivPlay.visibility = View.INVISIBLE
+	}
+
+	private fun setAlbumIconView(albumArt: String?) {
+		if (albumArt.isNullOrEmpty()) {
+			Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerSmall.ivAlbum)
+			Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerExpand.ivAlbum)
+		} else {
+			Glide.with(context!!).load(albumArt).into(musicPlayerSmall.ivAlbum)
+			Glide.with(context!!).load(albumArt).into(musicPlayerExpand.ivAlbum)
+		}
+	}
+
+	private fun setBackgroundView(albumArt: String?) {
+		if (albumArt.isNullOrEmpty()) {
+			ContextCompat.getColor(context!!, R.color.darkGrey).also {
+				view?.setBackgroundColor(it)
+				musicPlayerSmall.backGroundLine.setBackgroundColor(it)
+				if (activity is MainActivity) {
+					(activity as MainActivity).getRootView().setBackgroundColor(it)
+				}
+			}
+		} else {
+			BitmapHelper.blurBitmap(context!!, BitmapFactory.decodeFile(albumArt)).also {
+				view?.background = BitmapDrawable(resources, it)
+				musicPlayerSmall.backGroundLine.background = BitmapHelper.gradientFromBitmap(it)
+				(activity as? MainActivity)?.getRootView()?.background = BitmapDrawable(resources, it)
+			}
+		}
 	}
 
 	override fun initViewModelBinding() {

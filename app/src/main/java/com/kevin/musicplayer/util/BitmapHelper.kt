@@ -39,7 +39,7 @@ class BitmapHelper {
 			return outputBitmap
 		}
 
-		fun drawableToBitmap(drawable: Drawable): Bitmap? {
+		fun drawableToBitmap(drawable: Drawable): Bitmap {
 			if (drawable is BitmapDrawable) {
 				if (drawable.bitmap != null) {
 					return drawable.bitmap
