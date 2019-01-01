@@ -1,6 +1,7 @@
 package com.kevin.musicplayer.ui.player
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -10,11 +11,14 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.view.View
 import com.bumptech.glide.Glide
 import com.kevin.musicplayer.R
+import com.kevin.musicplayer.base.BaseActivity
 import com.kevin.musicplayer.base.BaseMVVMFragment
 import com.kevin.musicplayer.databinding.FragmentMusicPlayerBinding
+import com.kevin.musicplayer.ui.lyrics.LyricsActivity
 import com.kevin.musicplayer.ui.main.MainActivity
 import com.kevin.musicplayer.util.BitmapHelper
 import kotlinx.android.synthetic.main.fragment_music_player.*
+import kotlinx.android.synthetic.main.music_player_expand.*
 import kotlinx.android.synthetic.main.music_player_small.view.*
 
 
@@ -23,6 +27,7 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
 		initObservers()
+		ivLyrics.setOnClickListener { navigateToLyrics() }
 	}
 
 	private fun initObservers() {
@@ -108,6 +113,15 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 				musicPlayerSmall.backGroundLine.background = BitmapHelper.gradientFromBitmap(it)
 				(activity as? MainActivity)?.getRootView()?.background = BitmapDrawable(resources, it)
 			}
+		}
+	}
+
+	private fun navigateToLyrics() {
+		viewModel.currentTrack.value?.let {
+			val intent = Intent(context!!, LyricsActivity::class.java)
+			intent.putExtra("EXTRA_ARTIST", it.description.subtitle)
+			intent.putExtra("EXTRA_TITLE", it.description.title)
+			(activity!! as BaseActivity).startActivity(intent)
 		}
 	}
 

@@ -101,5 +101,12 @@
             app:layout_constraintStart_toStartOf="@+id/ivPlay"
             app:layout_constraintTop_toTopOf="@+id/ivPlay" />
 
+        <ImageView
+            android:id="@+id/ivLyrics"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_heart"
+            app:layout_constraintBottom_toTopOf="@id/ivPrevious"/>
+
     </android.support.constraint.ConstraintLayout>
 </layout>
