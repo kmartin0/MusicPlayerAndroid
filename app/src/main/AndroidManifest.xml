@@ -20,12 +20,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MusicActivity">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
         <activity android:name=".ui.lyrics.LyricsActivity" />
 
         <receiver android:name="android.support.v4.media.session.MediaButtonReceiver" >

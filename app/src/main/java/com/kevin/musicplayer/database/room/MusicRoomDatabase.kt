@@ -9,7 +9,6 @@ import com.kevin.musicplayer.dao.LyricsDao
 import com.kevin.musicplayer.model.Lyrics
 
 @Database(entities = [Lyrics::class], version = 2, exportSchema = false)
-@TypeConverters(MusicTypeConverters::class)
 abstract class MusicRoomDatabase : RoomDatabase() {
 
 	companion object {

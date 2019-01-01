@@ -24,6 +24,11 @@ class MusicService : MediaBrowserServiceCompat() {
 	private lateinit var notificationManager: NotificationManagerCompat
 	private lateinit var notificationBuilder: NotificationBuilder
 
+	companion object {
+		const val EXTRA_QUEUE_LIST = "EXTRA_QUEUE_LIST"
+		const val ACTION_APPEND_QUEUE = "ACTION_APPEND_QUEUE"
+	}
+
 	override fun onCreate() {
 		super.onCreate()
 		Log.i(LOG_TAG, "onCreate")
@@ -45,7 +50,7 @@ class MusicService : MediaBrowserServiceCompat() {
 			setPlaybackState(PlaybackStateHelper.STATE_STOPPED)
 
 			// MySessionCallback() has methods that handle callbacks from a media controller
-			setCallback(mySessionCallback)
+			setCallback(MediaSessionCallback())
 
 			// Set the session's token so that client activities can communicate with it.
 			setSessionToken(sessionToken)
@@ -79,7 +84,7 @@ class MusicService : MediaBrowserServiceCompat() {
 		}
 	}
 
-	private val mySessionCallback = object : MediaSessionCompat.Callback() {
+	inner class MediaSessionCallback : MediaSessionCompat.Callback() {
 
 		private val queue = ArrayList<MediaDescriptionCompat>()
 		private var currentQueueIndex = 0
@@ -95,6 +100,7 @@ class MusicService : MediaBrowserServiceCompat() {
 		override fun onPlay() {
 			Log.i(LOG_TAG, "onPlay")
 			if (queue.isNotEmpty()) {
+				Log.i("TAGZ", "MusicService.onPlay")
 				val toPlay = queue[currentQueueIndex]
 				if (mediaSession.controller.metadata?.description?.mediaId == toPlay.mediaId) {
 					MediaPlayerManager.getInstance().resume()
@@ -148,6 +154,7 @@ class MusicService : MediaBrowserServiceCompat() {
 		override fun onSkipToQueueItem(id: Long) {
 			Log.i(LOG_TAG, "onSkipToQueueItem")
 			currentQueueIndex = id.toInt()
+			onPlay()
 		}
 
 		override fun onStop() {
@@ -162,6 +169,16 @@ class MusicService : MediaBrowserServiceCompat() {
 		override fun onAddQueueItem(description: MediaDescriptionCompat?) {
 			Log.i(LOG_TAG, "onAddQueueItem")
 			if (description != null) queue.add(description)
+		}
+
+		override fun onCustomAction(action: String?, extras: Bundle?) {
+			Log.i("TAGZ", "onCustomAction")
+			when (action) {
+				ACTION_APPEND_QUEUE -> {
+					extras?.classLoader = this@MusicService.classLoader
+					queue.addAll(extras?.getParcelableArrayList<MediaDescriptionCompat>(EXTRA_QUEUE_LIST) as ArrayList<MediaDescriptionCompat>)
+				}
+			}
 		}
 	}
 }
