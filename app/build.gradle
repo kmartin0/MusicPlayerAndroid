@@ -87,4 +87,7 @@ dependencies {
 
     // Fast Scroll
     implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+
+    // Permission
+    implementation 'com.intentfilter:android-permissions:0.1.7'
 }

@@ -1,5 +1,6 @@
 package com.kevin.musicplayer.service
 
+import android.Manifest
 import android.os.Bundle
 import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.media.MediaBrowserCompat
@@ -8,6 +9,10 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
 import com.kevin.musicplayer.repository.MediaStoreRepository
 import com.kevin.musicplayer.util.*
+import android.widget.Toast
+import com.intentfilter.androidpermissions.PermissionManager
+import android.Manifest.permission
+import java.util.Collections.singleton
 
 
 private const val LOG_TAG = "MusicServiceLogTag"
@@ -78,9 +83,21 @@ class MusicService : MediaBrowserServiceCompat() {
 			parentMediaId: String,
 			result: MediaBrowserServiceCompat.Result<List<MediaBrowserCompat.MediaItem>>
 	) {
-		result.sendResult(
-				if (parentMediaId == MY_MEDIA_ROOT_ID) mediaStoreRepository.getAllTracks()
-				else null)
+		result.detach()
+		val permissionManager = PermissionManager.getInstance(this)
+		permissionManager.checkPermissions(singleton(Manifest.permission.READ_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
+
+			override fun onPermissionGranted() {
+				result.sendResult(
+						if (parentMediaId == MY_MEDIA_ROOT_ID) mediaStoreRepository.getAllTracks()
+						else null)
+			}
+
+			override fun onPermissionDenied() {
+				Toast.makeText(applicationContext, "Permissions Denied, please allow external storage access to display the music on your device.", Toast.LENGTH_SHORT).show()
+				result.sendResult(null)
+			}
+		})
 	}
 
 	/**

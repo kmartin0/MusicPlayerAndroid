@@ -20,9 +20,7 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Sli
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		if (checkPermissions()) {
 			init()
-		}
 	}
 
 	/**
@@ -34,44 +32,6 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Sli
 		musicPlayerFragment.musicPlayerExpand.alpha = 0f
 		slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
 		slidingLayout.addPanelSlideListener(this)
-	}
-
-	/**
-	 * Check if the [Manifest.permission.READ_EXTERNAL_STORAGE] is granted. If it's not granted
-	 * then it will request the permission to the user.
-	 */
-	private fun checkPermissions(): Boolean {
-		if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-				!= PackageManager.PERMISSION_GRANTED) {
-
-			// No explanation needed, we can request the permission.
-			ActivityCompat.requestPermissions(this,
-					arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-					PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE)
-
-			return false
-		}
-		return true
-	}
-
-	/**
-	 * Listens for [PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE] and checks if the permission
-	 * is granted. If it's granted the activity will be initialized. If it's not granted
-	 * the permission request will be sent again.
-	 */
-	override fun onRequestPermissionsResult(requestCode: Int,
-											permissions: Array<String>, grantResults: IntArray) {
-		when (requestCode) {
-			PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE -> {
-				// If request is cancelled, the result arrays are empty.
-				if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-					init()
-				} else {
-					checkPermissions()
-				}
-				return
-			}
-		}
 	}
 
 	/**
