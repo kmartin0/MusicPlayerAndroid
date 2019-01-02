@@ -28,11 +28,11 @@
                 android:id="@+id/ivAlbum"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:contentDescription="@string/album_art"
                 android:src="@drawable/ic_disc"
                 app:layout_constraintEnd_toStartOf="@id/tvTrack"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/album_art" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvTrack"
@@ -42,6 +42,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="3dp"
+                android:text="@string/empty_queue"
                 app:layout_constraintBottom_toTopOf="@id/tvArtist"
                 app:layout_constraintEnd_toStartOf="@id/ivPrevious"
                 app:layout_constraintStart_toEndOf="@id/ivAlbum"
@@ -64,46 +65,46 @@
                 android:id="@+id/ivPrevious"
                 style="@style/smallControlButton"
                 android:layout_marginEnd="20dp"
+                android:contentDescription="@string/previous"
                 android:onClick="@{ () -> viewModel.skipToPrevious() }"
                 android:src="@drawable/ic_backward"
                 app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
                 app:layout_constraintEnd_toStartOf="@id/ivPause"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/previous" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/ivPause"
                 style="@style/smallControlButton"
                 android:layout_marginEnd="20dp"
+                android:contentDescription="@string/pause"
                 android:onClick="@{ () -> viewModel.pauseTrack() }"
                 android:src="@drawable/ic_pause"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
                 app:layout_constraintEnd_toStartOf="@id/ivNext"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/pause" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/ivPlay"
                 style="@style/smallControlButton"
                 android:layout_marginEnd="20dp"
+                android:contentDescription="@string/play"
                 android:onClick="@{ () -> viewModel.resumeTrack() }"
                 android:src="@drawable/ic_play"
                 app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
                 app:layout_constraintEnd_toStartOf="@id/ivNext"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/play" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/ivNext"
                 style="@style/smallControlButton"
                 android:layout_marginEnd="20dp"
+                android:contentDescription="@string/next"
                 android:onClick="@{ () -> viewModel.skipToNext() }"
                 android:src="@drawable/ic_forward"
                 app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/next" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
