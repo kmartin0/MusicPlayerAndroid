@@ -13,17 +13,22 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LyricsRepository(context: Context) {
+class LyricsRepository(val context: Context) {
 	private var lyricsDao: LyricsDao
 
 	init {
-		val gameRoomDatabase = MusicRoomDatabase.getDatabase(context)
-		lyricsDao = gameRoomDatabase!!.lyricsDao()
+		val musicRoomDataBase = MusicRoomDatabase.getDatabase(context)
+		lyricsDao = musicRoomDataBase!!.lyricsDao()
 	}
 
-
+	/**
+	 * Get the [Lyrics] object from the [MusicRoomDatabase] for the [artist] and [title].
+	 * If the Lyrics are not yet stored in the database an api request will be made which will
+	 * then insert the retrieved [Lyrics] in the database.
+	 *
+	 * @return [LiveData] object which will contain the [Lyrics]
+	 */
 	fun getLyrics(artist: String, title: String): LiveData<Lyrics?> {
-
 		val lyrics = lyricsDao.getLyrics(artist, title)
 
 		if (lyrics.value == null) {
@@ -33,7 +38,7 @@ class LyricsRepository(context: Context) {
 							if (response.isSuccessful) {
 								insertLyrics(Lyrics(title, artist, response.body()?.lyrics))
 							} else {
-								insertLyrics(Lyrics(title, artist, LyricsApiHelper.readErrorMessage(response.errorBody()!!)))
+								insertLyrics(Lyrics(title, artist, LyricsApiHelper.readErrorMessage(response.errorBody()!!, context)))
 							}
 						}
 
@@ -45,6 +50,9 @@ class LyricsRepository(context: Context) {
 		return lyrics
 	}
 
+	/**
+	 * Insert the [Lyrics] in the [MusicRoomDatabase]
+	 */
 	fun insertLyrics(lyrics: Lyrics) {
 		doAsync { lyricsDao.insert(lyrics) }
 	}

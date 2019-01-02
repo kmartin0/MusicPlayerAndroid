@@ -8,15 +8,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class LyricsApi {
     companion object {
-        fun create(): LyricsApiService {
 
+		private const val BASE_LYRICS_API_URL = "https://api.lyrics.ovh/v1/"
+
+        fun create(): LyricsApiService {
             val okHttpClient = OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor()
                             .setLevel(HttpLoggingInterceptor.Level.BODY))
                     .build()
 
             val retrofit: Retrofit = Retrofit.Builder()
-                    .baseUrl("https://api.lyrics.ovh/v1/")
+                    .baseUrl(BASE_LYRICS_API_URL)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

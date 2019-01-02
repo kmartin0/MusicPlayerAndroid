@@ -17,6 +17,9 @@ abstract class BaseFragment : Fragment() {
 		return inflater.inflate(getLayoutId(), container, false)
 	}
 
+	/**
+	 * Calls [showLoading] from [BaseActivity]
+	 */
 	fun showLoading(visibility: Boolean) {
 		if (activity is BaseActivity) (activity as BaseActivity).showLoading(visibility)
 	}

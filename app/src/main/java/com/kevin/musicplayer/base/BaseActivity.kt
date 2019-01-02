@@ -4,19 +4,24 @@ import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ProgressBar
 import com.kevin.musicplayer.R
 
 abstract class BaseActivity : FragmentActivity() {
 
+	/**
+	 * Initialize the layout and title
+	 */
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		if (inflateView()) setContentView(getLayoutId())
 		title = getActivityTitle()
 	}
 
+	/**
+	 * Displays a loading indicator based on [visibility]
+	 */
 	fun showLoading(visibility: Boolean) {
 		findViewById<ProgressBar>(R.id.progressBar)?.visibility = if (visibility) View.VISIBLE else View.GONE
 	}

@@ -14,7 +14,8 @@
         android:layout_height="60dp"
         android:src="@drawable/ic_disc"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/album_art" />
 
     <TextView
         android:id="@+id/tvTrack"
@@ -23,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:text="Communication Breakdown"
         app:layout_constraintBottom_toTopOf="@id/tvArtist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivAlbum"
@@ -37,7 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:text="Led Zeppelin"
         app:layout_constraintBottom_toBottomOf="@id/ivAlbum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivAlbum"

@@ -25,33 +25,44 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Sli
 		}
 	}
 
+	/**
+	 * Adds the [TrackListFragment] to the container.
+	 * Sets up the sliding panel in it's collapsed state and adds the slide listener.
+	 */
 	private fun init() {
-		musicPlayerFragment.musicPlayerExpand.alpha = 0f
 		addFragment(R.id.fragmentContainer, TrackListFragment())
+		musicPlayerFragment.musicPlayerExpand.alpha = 0f
+		slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
 		slidingLayout.addPanelSlideListener(this)
 	}
 
+	/**
+	 * Check if the [Manifest.permission.READ_EXTERNAL_STORAGE] is granted. If it's not granted
+	 * then it will request the permission to the user.
+	 */
 	private fun checkPermissions(): Boolean {
 		if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
 				!= PackageManager.PERMISSION_GRANTED) {
 
-
 			// No explanation needed, we can request the permission.
 			ActivityCompat.requestPermissions(this,
 					arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-					100)
+					PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE)
 
 			return false
 		}
 		return true
 	}
 
-	fun getRootView() : ConstraintLayout = clRootMainActivity
-
+	/**
+	 * Listens for [PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE] and checks if the permission
+	 * is granted. If it's granted the activity will be initialized. If it's not granted
+	 * the permission request will be sent again.
+	 */
 	override fun onRequestPermissionsResult(requestCode: Int,
 											permissions: Array<String>, grantResults: IntArray) {
 		when (requestCode) {
-			100 -> {
+			PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE -> {
 				// If request is cancelled, the result arrays are empty.
 				if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
 					init()
@@ -63,6 +74,11 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Sli
 		}
 	}
 
+	/**
+	 * When the panel is sliding upwards the small music player will be faded out and the large
+	 * music player will be faded in. When sliding downwards the same will happen in opposite
+	 * direction.
+	 */
 	override fun onPanelSlide(panel: View?, slideOffset: Float) {
 		musicPlayerFragment.musicPlayerSmall.alpha = 1f - slideOffset
 		musicPlayerFragment.musicPlayerExpand.alpha = slideOffset
@@ -74,11 +90,17 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Sli
 
 	override fun getLayoutId(): Int = R.layout.activity_main
 
-	override fun getActivityTitle(): String = "My Music Player"
+	override fun getActivityTitle(): String = getString(R.string.app_name)
 
 	override fun getVMClass(): Class<MainViewModel> = MainViewModel::class.java
 
 	override fun initViewModelBinding() {
 		binding.viewModel = viewModel
+	}
+
+	fun getRootView(): ConstraintLayout = clRootMainActivity
+
+	companion object {
+		private const val PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE = 101
 	}
 }

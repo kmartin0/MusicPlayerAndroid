@@ -3,7 +3,6 @@ package com.kevin.musicplayer.database.room
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import com.kevin.musicplayer.dao.LyricsDao
 import com.kevin.musicplayer.model.Lyrics

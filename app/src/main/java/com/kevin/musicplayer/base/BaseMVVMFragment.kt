@@ -14,6 +14,9 @@ abstract class BaseMVVMFragment<T : ViewDataBinding, V : ViewModel> : BaseFragme
 	protected lateinit var binding: T
 	protected lateinit var viewModel: V
 
+	/**
+	 * Setup the data binding and view model connection
+	 */
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
 		viewModel = ViewModelProviders.of(this).get(getVMClass())

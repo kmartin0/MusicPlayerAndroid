@@ -18,7 +18,6 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.ui.main.MainActivity
 
@@ -27,35 +26,43 @@ const val NOW_PLAYING_NOTIFICATION: Int = 0xb339
 const val REQUEST_CODE: Int = 501
 
 /**
- * Helper class to encapsulate code for building notifications.
+ * Helper class for building notifications.
  */
 class NotificationBuilder(private val context: Context) {
 	private val platformNotificationManager: NotificationManager =
 			context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+	// Pending Intent which calls [PlaybackStateCompat.ACTION_STOP]
 	private val stopPendingIntent =
 			MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_STOP)
 
+	// Action which calls [PlaybackStateCompat.ACTION_PAUSE]
 	private val pauseAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_pause,
 			"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_PAUSE))
 
+	// Action which calls [PlaybackStateCompat.ACTION_PLAY]
 	private val playAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_play,
 			"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_PLAY))
 
+	// Action which calls [PlaybackStateCompat.ACTION_SKIP_TO_NEXT]
 	private val skipToNextAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_next,
 			"Next", MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_SKIP_TO_NEXT))
 
+	// Action which calls [PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS]
 	private val skipToPreviousAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_previous,
 			"Next", MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS))
 
+	/**
+	 * Builds a media style notification for a [sessionToken]
+	 */
 	fun buildNotification(sessionToken: MediaSessionCompat.Token): Notification {
 		if (shouldCreateNowPlayingChannel()) {
 			createNowPlayingChannel()

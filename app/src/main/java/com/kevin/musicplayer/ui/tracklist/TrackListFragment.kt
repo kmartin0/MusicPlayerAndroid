@@ -20,11 +20,18 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, TrackListVi
 		initObservers()
 	}
 
+	/**
+	 * Observe [TrackListViewModel.trackList] and update the [trackListAdapter] track list
+	 * Observe [TrackListViewModel.currentTrack] and update the [trackListAdapter] current track
+	 */
 	private fun initObservers() {
 		viewModel.trackList.observe(this, Observer { onDataSetChanged(it) })
 		viewModel.currentTrack.observe(this, Observer { trackListAdapter.setCurrentTrack(it) })
 	}
 
+	/**
+	 * Initializes the [trackListAdapter] and [rvSongList] with the [fastScroller]
+	 */
 	private fun initTrackListRv() {
 		trackListAdapter = TrackListAdapter(songList) { onTrackClicked(it) }
 		rvSongList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -32,6 +39,9 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, TrackListVi
 		fastScroller.setRecyclerView(rvSongList)
 	}
 
+	/**
+	 * Clears the [songList], adds all [tracks] and notifies the [trackListAdapter] about the data changes
+	 */
 	private fun onDataSetChanged(tracks: List<MediaBrowserCompat.MediaItem>?) {
 		songList.clear()
 		tracks?.let { songList.addAll(tracks) }

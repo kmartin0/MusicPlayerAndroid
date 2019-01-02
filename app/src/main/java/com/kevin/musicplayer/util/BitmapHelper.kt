@@ -1,17 +1,15 @@
 package com.kevin.musicplayer.util
 
 import android.content.Context
-import android.renderscript.Allocation
-import android.renderscript.ScriptIntrinsicBlur
-import android.renderscript.RenderScript
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Color
-import android.renderscript.Element
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
 
 
 private const val BITMAP_SCALE = .1f
@@ -20,6 +18,10 @@ private const val BLUR_RADIUS = 25f
 class BitmapHelper {
 
 	companion object {
+
+		/**
+		 * @return a blurred [Bitmap] of the [image]
+		 */
 		fun blurBitmap(context: Context, image: Bitmap): Bitmap {
 			val width = Math.round(image.width * BITMAP_SCALE)
 			val height = Math.round(image.height * BITMAP_SCALE)
@@ -39,6 +41,9 @@ class BitmapHelper {
 			return outputBitmap
 		}
 
+		/**
+		 * @return a [Bitmap] from the [Drawable]
+		 */
 		fun drawableToBitmap(drawable: Drawable): Bitmap {
 			if (drawable is BitmapDrawable) {
 				if (drawable.bitmap != null) {
@@ -58,12 +63,9 @@ class BitmapHelper {
 			return bitmap
 		}
 
-		fun colorToBitmap(color: Int): Bitmap {
-			return Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888).also {
-				Canvas(it).apply { drawColor(color) }
-			}
-		}
-
+		/**
+		 * @return [GradientDrawable] containing a gradient from two selected pixels from the [bitmap]
+		 */
 		fun gradientFromBitmap(bitmap: Bitmap): GradientDrawable {
 			val gradient1 = bitmap.getPixel(bitmap.width / 4, bitmap.height / 4)
 			val gradient2 = bitmap.getPixel(bitmap.width - (bitmap.width / 4), bitmap.height - (bitmap.height / 4))

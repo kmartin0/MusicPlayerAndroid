@@ -9,14 +9,30 @@ import kotlinx.android.synthetic.main.activity_lyrics.*
 
 class LyricsActivity : BaseMVVMActivity<ActivityLyricsBinding, LyricsViewModel>() {
 
+	companion object {
+		const val EXTRA_ARTIST = "EXTRA_ARTIST"
+		const val EXTRA_TITLE = "EXTRA_TITLE"
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		initFromExtras()
+		initActionBar()
+	}
+
+	/**
+	 * Initializes the actionbar
+	 */
+	private fun initActionBar() {
 		setActionBar(toolbarLyrics)
 		actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
 		actionBar?.setDisplayHomeAsUpEnabled(true)
 	}
 
+	/**
+	 * If extras are sent, gets the artist and title sent in extras and tells the view model
+	 * to get the lyrics.
+	 */
 	private fun initFromExtras() {
 		intent.extras?.let {
 			val artist = it.getString(EXTRA_ARTIST)
@@ -38,7 +54,7 @@ class LyricsActivity : BaseMVVMActivity<ActivityLyricsBinding, LyricsViewModel>(
 		}
 	}
 
-	override fun getActivityTitle(): String = "Lyrics"
+	override fun getActivityTitle(): String = getString(R.string.lyrics)
 
 	override fun initViewModelBinding() {
 		binding.viewModel = viewModel
@@ -48,10 +64,4 @@ class LyricsActivity : BaseMVVMActivity<ActivityLyricsBinding, LyricsViewModel>(
 	override fun getVMClass(): Class<LyricsViewModel> = LyricsViewModel::class.java
 
 	override fun getLayoutId(): Int = R.layout.activity_lyrics
-
-	companion object {
-		const val EXTRA_ARTIST = "EXTRA_ARTIST"
-		const val EXTRA_TITLE = "EXTRA_TITLE"
-	}
-
 }

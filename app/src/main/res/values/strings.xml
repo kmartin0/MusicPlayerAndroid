@@ -1,15 +1,14 @@
 <resources>
     <string name="app_name">MusicPlayer</string>
 
-    <string name="notification_skip_to_previous">Previous</string>
-    <string name="notification_play">Play</string>
-    <string name="notification_pause">Pause</string>
-    <string name="notification_skip_to_next">Next</string>
     <string name="notification_channel">notification channel</string>
     <string name="notification_channel_description">notification channel description</string>
     <string name="empty_queue">Empty Queue</string>
-
-    notification_channel_description
-
-
+    <string name="lyrics">Lyrics</string>
+    <string name="lyrics_api_error">Something went wrong while reading the lyrics.</string>
+    <string name="album_art">Album Art</string>
+    <string name="previous">Previous</string>
+    <string name="pause">Pause</string>
+    <string name="play">Play</string>
+    <string name="next">Next</string>
 </resources>

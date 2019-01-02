@@ -10,6 +10,9 @@ abstract class BaseMVVMActivity<T : ViewDataBinding, V : BaseViewModel> : BaseAc
 	protected lateinit var binding: T
 	protected lateinit var viewModel: V
 
+	/**
+	 * Setup the data binding and view model
+	 */
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		binding = DataBindingUtil.setContentView(this, getLayoutId())
@@ -17,6 +20,9 @@ abstract class BaseMVVMActivity<T : ViewDataBinding, V : BaseViewModel> : BaseAc
 		initViewModelBinding()
 	}
 
+	/**
+	 * Display the loading indicator based on the [BaseViewModel.isLoading]
+	 */
 	fun initLoadingObserver() {
 		viewModel.isLoading.observe(this, Observer { isLoading ->
 			if (isLoading != null) showLoading(isLoading) else showLoading(false)

@@ -14,6 +14,9 @@ class TrackListViewModel(application: Application) : BaseViewModel(application) 
 	val trackList = mediaSessionConnection.mediaItems
 	val currentTrack = mediaSessionConnection.currentTrack
 
+	/**
+	 * Load the [trackList] in the queue of the music player and play the [mediaItem]
+	 */
 	fun play(mediaItem: MediaBrowserCompat.MediaItem) {
 		mediaSessionConnection.transportControls.stop()
 

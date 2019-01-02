@@ -12,6 +12,10 @@ import com.kevin.musicplayer.model.Artist
 
 class MediaStoreDatabase(private val context: Context) {
 
+	/**
+	 * @return a list of [MediaBrowserCompat.MediaItem] objects from all the tracks in the
+	 * MediaStore Database
+	 */
 	fun getAllTracks(): List<MediaBrowserCompat.MediaItem> {
 		val tracksCursor = MediaStoreHelper.getTracksCursor(context)
 
@@ -45,6 +49,9 @@ class MediaStoreDatabase(private val context: Context) {
 		return trackList
 	}
 
+	/**
+	 * @return a list of [Artist] objects from all the artists in the MediaStore Database
+	 */
 	fun getAllArtists(): List<Artist> {
 		val artistsCursor = MediaStoreHelper.getArtistsCursor(context)
 		val artistList = ArrayList<Artist>()
@@ -65,6 +72,9 @@ class MediaStoreDatabase(private val context: Context) {
 		return artistList
 	}
 
+	/**
+	 * @return a list of [Album] objects from all the albums in the MediaStore Database
+	 */
 	fun getAllAlbums(): List<Album> {
 		val albumCursor = MediaStoreHelper.getAlbumsCursor(context)
 		val albumList = ArrayList<Album>()

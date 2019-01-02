@@ -18,9 +18,9 @@
 
         <ImageView
             android:id="@+id/ivAlbum"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            android:layout_marginTop="68dp"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:layout_marginTop="50dp"
             android:src="@drawable/ic_disc"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -106,6 +106,7 @@
             style="@style/largeControlButton"
             android:layout_marginBottom="20dp"
             android:src="@drawable/ic_lyrics"
+            android:onClick="@{ () -> viewModel.onLyricsClick() }"
             app:layout_constraintBottom_toTopOf="@+id/ivPause"
             app:layout_constraintEnd_toEndOf="@+id/ivPause"
             app:layout_constraintStart_toStartOf="@+id/ivPause"

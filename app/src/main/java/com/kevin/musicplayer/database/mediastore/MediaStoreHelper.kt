@@ -8,6 +8,9 @@ class MediaStoreHelper {
 
     companion object {
 
+        /**
+         * @return a [Cursor] object to retrieve all tracks from the MediaStore Database
+         */
         fun getTracksCursor(context: Context): Cursor? {
             // Uri maps to the table in the provider named table_name.
             val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -44,6 +47,9 @@ class MediaStoreHelper {
             )
         }
 
+		/**
+		 * @return a [Cursor] object to retrieve all albums from the MediaStore Database
+		 */
         fun getAlbumsCursor(context: Context): Cursor? {
 
             // Uri maps to the table in the provider named table_name.
@@ -68,6 +74,9 @@ class MediaStoreHelper {
             )
         }
 
+		/**
+		 * @return a [Cursor] object to retrieve all artists from the MediaStore Database
+		 */
         fun getArtistsCursor(context: Context): Cursor? {
 
             // Uri maps to the table in the provider named table_name.
