@@ -149,7 +149,7 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 				}
 			}
 		} else {
-			BitmapHelper.blurBitmap(context!!, BitmapFactory.decodeFile(albumArt)).also {
+			BitmapHelper.blurAlbumArt(albumArt, context!!).also {
 				view?.background = BitmapDrawable(resources, it)
 				musicPlayerSmall.backGroundLine.background = BitmapHelper.gradientFromBitmap(it)
 				(activity as? MainActivity)?.getRootView()?.background = BitmapDrawable(resources, it)

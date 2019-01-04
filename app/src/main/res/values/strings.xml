@@ -11,4 +11,5 @@
     <string name="pause">Pause</string>
     <string name="play">Play</string>
     <string name="next">Next</string>
+    <string name="store_permission_denied_msg">Permissions Denied, please allow external storage access to display the music on your device.</string>
 </resources>
