@@ -1,17 +1,24 @@
 package com.kevin.musicplayer.service
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.media.AudioManager
 import android.os.Bundle
 import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaDescriptionCompat
+import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
-import com.kevin.musicplayer.repository.MediaStoreRepository
-import com.kevin.musicplayer.util.*
+import android.util.Log
 import android.widget.Toast
 import com.intentfilter.androidpermissions.PermissionManager
-import android.Manifest.permission
+import com.kevin.musicplayer.R
+import com.kevin.musicplayer.repository.MediaStoreRepository
+import com.kevin.musicplayer.util.*
 import java.util.Collections.singleton
 
 
@@ -22,6 +29,7 @@ class MusicService : MediaBrowserServiceCompat() {
 	private lateinit var mediaSession: MediaSessionCompat
 	private lateinit var notificationManager: NotificationManagerCompat
 	private lateinit var notificationBuilder: NotificationBuilder
+	private lateinit var noisyReceiver: NoisyReceiver
 	private val mediaStoreRepository = MediaStoreRepository(this)
 
 	companion object {
@@ -34,6 +42,7 @@ class MusicService : MediaBrowserServiceCompat() {
 		super.onCreate()
 		initMediaSession()
 		initNotification()
+		initNoisyReceiver()
 	}
 
 	private fun initMediaSession() {
@@ -65,6 +74,10 @@ class MusicService : MediaBrowserServiceCompat() {
 		notificationManager = NotificationManagerCompat.from(this)
 	}
 
+	private fun initNoisyReceiver() {
+		noisyReceiver = NoisyReceiver(this, mediaSession.sessionToken)
+	}
+
 	/**
 	 * @return the [MediaBrowserServiceCompat.BrowserRoot] of this app.
 	 */
@@ -94,7 +107,7 @@ class MusicService : MediaBrowserServiceCompat() {
 			}
 
 			override fun onPermissionDenied() {
-				Toast.makeText(applicationContext, "Permissions Denied, please allow external storage access to display the music on your device.", Toast.LENGTH_SHORT).show()
+				Toast.makeText(applicationContext, getString(R.string.store_permission_denied_msg), Toast.LENGTH_SHORT).show()
 				result.sendResult(null)
 			}
 		})
@@ -115,6 +128,7 @@ class MusicService : MediaBrowserServiceCompat() {
 		override fun onPlay() {
 			if (queue.isNotEmpty()) {
 				val toPlay = queue[currentQueueIndex]
+				noisyReceiver.registerNoisyReceiver()
 				if (mediaSession.controller.metadata?.description?.mediaId == toPlay.mediaId) { // Resume the current track
 					MediaPlayerManager.getInstance().resume()
 					mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PLAYING)
@@ -132,6 +146,7 @@ class MusicService : MediaBrowserServiceCompat() {
 		 * Pause the current track
 		 */
 		override fun onPause() {
+			noisyReceiver.unregisterNoisyReceiver()
 			MediaPlayerManager.getInstance().pause()
 			mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PAUSED)
 			stopForeground(false)
@@ -142,6 +157,7 @@ class MusicService : MediaBrowserServiceCompat() {
 		 * Stop the MediaPlayer and clear the queue.
 		 */
 		override fun onStop() {
+			noisyReceiver.registerNoisyReceiver()
 			MediaPlayerManager.getInstance().reset()
 			mediaSession.setPlaybackState(PlaybackStateHelper.STATE_STOPPED)
 			queue.clear()
@@ -211,3 +227,37 @@ class MusicService : MediaBrowserServiceCompat() {
 	}
 }
 
+/**
+ * Helper class for listening for when headphones are unplugged (or the audio
+ * will otherwise cause playback to become "noisy").
+ */
+private class NoisyReceiver(private val context: Context,
+							sessionToken: MediaSessionCompat.Token)
+	: BroadcastReceiver() {
+
+	private val noisyIntentFilter = IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+	private val controller = MediaControllerCompat(context, sessionToken)
+
+	private var registered = false
+
+	fun registerNoisyReceiver() {
+		if (!registered) {
+			context.registerReceiver(this, noisyIntentFilter)
+			registered = true
+		}
+	}
+
+	fun unregisterNoisyReceiver() {
+		if (registered) {
+			context.unregisterReceiver(this)
+			registered = false
+		}
+	}
+
+	override fun onReceive(context: Context, intent: Intent) {
+		if (intent.action == AudioManager.ACTION_AUDIO_BECOMING_NOISY) {
+			Log.i(LOG_TAG, "SOMEONE BECOMING NOISY")
+			controller.transportControls.pause()
+		}
+	}
+}
