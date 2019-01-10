@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Bundle
 import android.support.v4.app.NotificationManagerCompat
@@ -13,7 +15,6 @@ import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.util.Log
 import android.widget.Toast
 import com.intentfilter.androidpermissions.PermissionManager
 import com.kevin.musicplayer.R
@@ -30,7 +31,9 @@ class MusicService : MediaBrowserServiceCompat() {
 	private lateinit var notificationManager: NotificationManagerCompat
 	private lateinit var notificationBuilder: NotificationBuilder
 	private lateinit var noisyReceiver: NoisyReceiver
+	private lateinit var audioFocusRequest: AudioFocusRequest
 	private val mediaStoreRepository = MediaStoreRepository(this)
+
 
 	companion object {
 		const val EXTRA_QUEUE_LIST = "EXTRA_QUEUE_LIST"
@@ -43,6 +46,7 @@ class MusicService : MediaBrowserServiceCompat() {
 		initMediaSession()
 		initNotification()
 		initNoisyReceiver()
+		initAudioFocusListener()
 	}
 
 	private fun initMediaSession() {
@@ -76,6 +80,16 @@ class MusicService : MediaBrowserServiceCompat() {
 
 	private fun initNoisyReceiver() {
 		noisyReceiver = NoisyReceiver(this, mediaSession.sessionToken)
+	}
+
+	private fun initAudioFocusListener() {
+		audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+				.setAudioAttributes(AudioAttributes.Builder()
+						.setUsage(AudioAttributes.USAGE_GAME)
+						.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+						.build())
+				.setOnAudioFocusChangeListener(FocusRequestListener(this@MusicService, mediaSession.sessionToken))
+				.build()
 	}
 
 	/**
@@ -120,6 +134,7 @@ class MusicService : MediaBrowserServiceCompat() {
 
 		private val queue = ArrayList<MediaDescriptionCompat>()
 		private var currentQueueIndex = 0
+		private val mAudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
 		/**
 		 * Resumes if the current track if it is already playing. Otherwise it will start
@@ -127,15 +142,15 @@ class MusicService : MediaBrowserServiceCompat() {
 		 */
 		override fun onPlay() {
 			if (queue.isNotEmpty()) {
-				val toPlay = queue[currentQueueIndex]
-				noisyReceiver.registerNoisyReceiver()
-				if (mediaSession.controller.metadata?.description?.mediaId == toPlay.mediaId) { // Resume the current track
-					MediaPlayerManager.getInstance().resume()
-					mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PLAYING)
-					notificationManager.notify(NOW_PLAYING_NOTIFICATION, notificationBuilder.buildNotification(mediaSession.sessionToken))
-				} else { // Start the current track
-					MediaPlayerManager.getInstance().playMediaItem(toPlay.mediaUri.toString())
-					mediaSession.setMetadata(MediaHelper.descriptionCompatToMetadataCompat(toPlay))
+				if (mAudioManager.requestAudioFocus(audioFocusRequest) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+					val toPlay = queue[currentQueueIndex]
+					noisyReceiver.registerNoisyReceiver()
+					if (mediaSession.controller.metadata?.description?.mediaId == toPlay.mediaId) { // Resume the current track
+						MediaPlayerManager.getInstance().resume()
+					} else { // Start the current track
+						MediaPlayerManager.getInstance().playMediaItem(toPlay.mediaUri.toString())
+						mediaSession.setMetadata(MediaHelper.descriptionCompatToMetadataCompat(toPlay))
+					}
 					mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PLAYING)
 					startForeground(NOW_PLAYING_NOTIFICATION, notificationBuilder.buildNotification(mediaSession.sessionToken))
 				}
@@ -157,12 +172,14 @@ class MusicService : MediaBrowserServiceCompat() {
 		 * Stop the MediaPlayer and clear the queue.
 		 */
 		override fun onStop() {
+			mAudioManager.abandonAudioFocusRequest(audioFocusRequest)
 			noisyReceiver.registerNoisyReceiver()
 			MediaPlayerManager.getInstance().reset()
 			mediaSession.setPlaybackState(PlaybackStateHelper.STATE_STOPPED)
 			queue.clear()
 			currentQueueIndex = 0
 			mediaSession.setMetadata(null)
+			stopForeground(true)
 		}
 
 		/**
@@ -256,8 +273,22 @@ private class NoisyReceiver(private val context: Context,
 
 	override fun onReceive(context: Context, intent: Intent) {
 		if (intent.action == AudioManager.ACTION_AUDIO_BECOMING_NOISY) {
-			Log.i(LOG_TAG, "SOMEONE BECOMING NOISY")
 			controller.transportControls.pause()
+		}
+	}
+}
+
+private class FocusRequestListener(context: Context, sessionToken: MediaSessionCompat.Token)
+	: AudioManager.OnAudioFocusChangeListener {
+
+	private val controller = MediaControllerCompat(context, sessionToken)
+
+	override fun onAudioFocusChange(newFocus: Int) {
+		when (newFocus) {
+			AudioManager.AUDIOFOCUS_GAIN -> controller.transportControls.play()
+			AudioManager.AUDIOFOCUS_LOSS,
+			AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
+			AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> controller.transportControls.pause()
 		}
 	}
 }

@@ -1,6 +1,8 @@
 package com.kevin.musicplayer.ui.tracklist
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.os.Handler
 import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.media.MediaBrowserCompat
@@ -12,6 +14,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.futuremind.recyclerviewfastscroll.SectionTitleProvider
 import com.kevin.musicplayer.R
 
@@ -36,8 +42,19 @@ class TrackListAdapter(private val trackList: List<MediaBrowserCompat.MediaItem>
 		val trackTitle = trackList[position].description.title?.toString()
 		val trackArtist = trackList[position].description.subtitle?.toString()
 
-		if (albumUri != null) Glide.with(context).load(albumUri).into(holder.ivAlbum)
-		else Glide.with(context).load(R.drawable.ic_disc).into(holder.ivAlbum)
+		Glide.with(context)
+				.load(albumUri)
+				.listener(object : RequestListener<Drawable> {
+					override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+						Handler().post { Glide.with(context).load(R.drawable.ic_disc).into(holder.ivAlbum) }
+						return false
+					}
+
+					override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+						return false
+					}
+				})
+				.into(holder.ivAlbum)
 
 		holder.tvTitle.text = trackTitle
 		holder.tvArtist.text = trackArtist
