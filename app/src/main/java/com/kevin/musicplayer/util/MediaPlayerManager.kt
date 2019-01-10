@@ -20,8 +20,8 @@ class MediaPlayerManager : MediaPlayer.OnCompletionListener {
 	/**
 	 * Create a new [MediaPlayer] and play the [trackUri]
 	 */
-	fun playMediaItem(trackUri: String) {
-		createMediaPlayer()
+	fun playMediaItem(trackUri: String, onCompletionCallback: () -> Unit) {
+		createMediaPlayer(onCompletionCallback)
 		mediaPlayer!!.setDataSource(trackUri)
 		mediaPlayer!!.prepare()
 		mediaPlayer!!.start()
@@ -44,10 +44,13 @@ class MediaPlayerManager : MediaPlayer.OnCompletionListener {
 	/**
 	 * Release the [mediaPlayer] and create a new [MediaPlayer] object.
 	 */
-	private fun createMediaPlayer() {
+	private fun createMediaPlayer(onCompletionCallback: () -> Unit) {
 		reset()
 		mediaPlayer = MediaPlayer()
-		mediaPlayer!!.setOnCompletionListener(this)
+		mediaPlayer!!.setOnCompletionListener {
+			reset()
+			onCompletionCallback()
+		}
 	}
 
 	/**

@@ -145,12 +145,14 @@ class MusicService : MediaBrowserServiceCompat() {
 				if (mAudioManager.requestAudioFocus(audioFocusRequest) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 					val toPlay = queue[currentQueueIndex]
 					noisyReceiver.registerNoisyReceiver()
+
 					if (mediaSession.controller.metadata?.description?.mediaId == toPlay.mediaId) { // Resume the current track
 						MediaPlayerManager.getInstance().resume()
 					} else { // Start the current track
-						MediaPlayerManager.getInstance().playMediaItem(toPlay.mediaUri.toString())
+						MediaPlayerManager.getInstance().playMediaItem(toPlay.mediaUri.toString()) { onSkipToNext() }
 						mediaSession.setMetadata(MediaHelper.descriptionCompatToMetadataCompat(toPlay))
 					}
+
 					mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PLAYING)
 					startForeground(NOW_PLAYING_NOTIFICATION, notificationBuilder.buildNotification(mediaSession.sessionToken))
 				}
