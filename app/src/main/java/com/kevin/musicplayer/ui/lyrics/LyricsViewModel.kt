@@ -1,8 +1,8 @@
 package com.kevin.musicplayer.ui.lyrics
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.kevin.musicplayer.base.BaseViewModel
 import com.kevin.musicplayer.model.Lyrics
 import com.kevin.musicplayer.repository.LyricsRepository

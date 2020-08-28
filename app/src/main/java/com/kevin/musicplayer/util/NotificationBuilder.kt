@@ -9,12 +9,12 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.support.annotation.RequiresApi
-import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import android.support.v4.media.MediaMetadataCompat
-import android.support.v4.media.app.NotificationCompat.MediaStyle
-import android.support.v4.media.session.MediaButtonReceiver
+import androidx.media.app.NotificationCompat.MediaStyle
+import androidx.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -34,30 +34,30 @@ class NotificationBuilder(private val context: Context) {
 
 	// Pending Intent which calls [PlaybackStateCompat.ACTION_STOP]
 	private val stopPendingIntent =
-			MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_STOP)
+			androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_STOP)
 
 	// Action which calls [PlaybackStateCompat.ACTION_PAUSE]
 	private val pauseAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_pause,
-			"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(
+			"Pause", androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_PAUSE))
 
 	// Action which calls [PlaybackStateCompat.ACTION_PLAY]
 	private val playAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_play,
-			"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(
+			"Pause", androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_PLAY))
 
 	// Action which calls [PlaybackStateCompat.ACTION_SKIP_TO_NEXT]
 	private val skipToNextAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_next,
-			"Next", MediaButtonReceiver.buildMediaButtonPendingIntent(
+			"Next", androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_SKIP_TO_NEXT))
 
 	// Action which calls [PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS]
 	private val skipToPreviousAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_previous,
-			"Next", MediaButtonReceiver.buildMediaButtonPendingIntent(
+			"Next", androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS))
 
 	/**

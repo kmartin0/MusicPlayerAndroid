@@ -1,9 +1,9 @@
 package com.kevin.musicplayer.base
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import android.os.Bundle
 
 abstract class BaseMVVMActivity<T : ViewDataBinding, V : BaseViewModel> : BaseActivity() {

@@ -1,6 +1,6 @@
 package com.kevin.musicplayer.repository
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import android.content.Context
 import com.kevin.musicplayer.api.LyricsApi
 import com.kevin.musicplayer.api.LyricsResponse

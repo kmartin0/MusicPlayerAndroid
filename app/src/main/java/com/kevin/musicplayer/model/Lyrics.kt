@@ -1,6 +1,6 @@
 package com.kevin.musicplayer.model
 
-import android.arch.persistence.room.Entity
+import androidx.room.Entity
 
 @Entity(tableName = "lyrics_table", primaryKeys = ["title", "artist"])
 data class Lyrics(

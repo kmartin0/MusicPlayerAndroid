@@ -1,9 +1,9 @@
 package com.kevin.musicplayer.ui.tracklist
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMFragment
 import com.kevin.musicplayer.databinding.FragmentTrackListBinding
@@ -34,7 +34,7 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, TrackListVi
 	 */
 	private fun initTrackListRv() {
 		trackListAdapter = TrackListAdapter(songList) { onTrackClicked(it) }
-		rvSongList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+		rvSongList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
 		rvSongList.adapter = trackListAdapter
 		fastScroller.setRecyclerView(rvSongList)
 	}

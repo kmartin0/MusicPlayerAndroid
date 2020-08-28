@@ -10,7 +10,7 @@
 
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clRootMainActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,7 +30,7 @@
             sothree:umanoPanelHeight="68dp"
             sothree:umanoShadowHeight="4dp">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -41,7 +41,7 @@
 
                 <ProgressBar style="@style/progressBar" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <fragment
                 android:id="@+id/musicPlayerFragment"
@@ -53,6 +53,6 @@
                 android:focusable="true" />
 
         </com.sothree.slidinguppanel.SlidingUpPanelLayout>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 
