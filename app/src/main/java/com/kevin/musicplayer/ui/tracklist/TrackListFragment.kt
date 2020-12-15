@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMFragment
 import com.kevin.musicplayer.databinding.FragmentTrackListBinding
-import kotlinx.android.synthetic.main.fragment_track_list.*
 
 class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, TrackListViewModel>() {
 
@@ -29,13 +28,13 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, TrackListVi
 	}
 
 	/**
-	 * Initializes the [trackListAdapter] and [rvSongList] with the [fastScroller]
+	 * Initializes the [trackListAdapter] and song list with the fast scroller
 	 */
 	private fun initTrackListRv() {
 		trackListAdapter = TrackListAdapter(songList) { onTrackClicked(it) }
-		rvSongList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-		rvSongList.adapter = trackListAdapter
-		fastScroller.setRecyclerView(rvSongList)
+		binding.rvSongList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+		binding.rvSongList.adapter = trackListAdapter
+		binding.fastScroller.setRecyclerView(binding.rvSongList)
 	}
 
 	/**

@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -18,15 +17,13 @@ import com.kevin.musicplayer.ui.lyrics.LyricsActivity
 import com.kevin.musicplayer.ui.main.MainActivity
 import com.kevin.musicplayer.util.AlbumArtHelper
 import com.kevin.musicplayer.util.BitmapHelper
-import kotlinx.android.synthetic.main.fragment_music_player.*
-import kotlinx.android.synthetic.main.music_player_small.view.*
 
 @Suppress("unused")
 class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPlayerViewModel>() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		musicPlayerExpand.alpha = 0f
+		binding.musicPlayerExpand.root.alpha = 0f
 		initObservers()
 	}
 
@@ -62,7 +59,6 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	 * Sets the album icon, background, artist and title for the [metadata].
 	 */
 	private fun setTrackState(metadata: MediaMetadataCompat) {
-		Log.i("TAGZ", "Track state: $metadata")
 		with(metadata) {
 			setBackgroundView(description.mediaUri)
 			setAlbumIconView(description.mediaUri)
@@ -87,38 +83,38 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	 * Sets the artist for the small and large music player.
 	 */
 	private fun setArtistView(artist: String) {
-		musicPlayerSmall.tvArtist.text = artist
-		musicPlayerExpand.tvArtist.text = artist
+		binding.musicPlayerSmall.tvArtist.text = artist
+		binding.musicPlayerExpand.tvArtist.text = artist
 	}
 
 	/**
 	 * Sets the track title for the small and large music player.
 	 */
 	private fun setTitleView(title: String) {
-		musicPlayerSmall.tvTrack.text = title
-		musicPlayerExpand.tvTrack.text = title
+		binding.musicPlayerSmall.tvTrack.text = title
+		binding.musicPlayerExpand.tvTrack.text = title
 	}
 
 	/**
 	 * Enabled the play button and disables the pause button for the small and large music player.
 	 */
 	private fun enablePlayButton() {
-		musicPlayerSmall.ivPlay.visibility = View.VISIBLE
-		musicPlayerExpand.ivPlay.visibility = View.VISIBLE
+		binding.musicPlayerSmall.ivPlay.visibility = View.VISIBLE
+		binding.musicPlayerExpand.ivPlay.visibility = View.VISIBLE
 
-		musicPlayerSmall.ivPause.visibility = View.INVISIBLE
-		musicPlayerExpand.ivPause.visibility = View.INVISIBLE
+		binding.musicPlayerSmall.ivPause.visibility = View.INVISIBLE
+		binding.musicPlayerExpand.ivPause.visibility = View.INVISIBLE
 	}
 
 	/**
 	 * Enabled the pause button and disables the play button for the small and large music player.
 	 */
 	private fun enablePauseButton() {
-		musicPlayerSmall.ivPause.visibility = View.VISIBLE
-		musicPlayerExpand.ivPause.visibility = View.VISIBLE
+		binding.musicPlayerSmall.ivPause.visibility = View.VISIBLE
+		binding.musicPlayerExpand.ivPause.visibility = View.VISIBLE
 
-		musicPlayerSmall.ivPlay.visibility = View.INVISIBLE
-		musicPlayerExpand.ivPlay.visibility = View.INVISIBLE
+		binding.musicPlayerSmall.ivPlay.visibility = View.INVISIBLE
+		binding.musicPlayerExpand.ivPlay.visibility = View.INVISIBLE
 	}
 
 	/**
@@ -128,8 +124,8 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	 */
 	private fun setAlbumIconView(mediaContentUri: Uri?) {
 		with(AlbumArtHelper.getAlbumArtBitmap(mediaContentUri, requireContext())) {
-			Glide.with(requireContext()).load(this).into(musicPlayerSmall.ivAlbum)
-			Glide.with(requireContext()).load(this).into(musicPlayerExpand.ivAlbum)
+			Glide.with(requireContext()).load(this).into(binding.musicPlayerSmall.ivAlbum)
+			Glide.with(requireContext()).load(this).into(binding.musicPlayerExpand.ivAlbum)
 		}
 	}
 
@@ -142,15 +138,15 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	private fun setBackgroundView(mediaContentUri: Uri?) {
 		if (mediaContentUri != null) {
 			BitmapHelper.blurAlbumArt(mediaContentUri, requireContext()).also {
-				musicPlayerExpand.background = BitmapDrawable(resources, it)
-				musicPlayerSmall.backGroundLine.background = BitmapHelper.gradientFromBitmap(it)
+				binding.musicPlayerExpand.root.background = BitmapDrawable(resources, it)
+				binding.musicPlayerSmall.backGroundLine.background = BitmapHelper.gradientFromBitmap(it)
 				(activity as? MainActivity)?.getRootView()?.background = BitmapDrawable(resources, it)
 			}
 		} else { // If no media is played set all backgrounds to dark grey.
 			ContextCompat.getColor(requireContext(), R.color.darkGrey).also {
 				view?.setBackgroundColor(it)
-				musicPlayerSmall.backGroundLine.setBackgroundColor(it)
-				musicPlayerExpand.setBackgroundColor(it)
+				binding.musicPlayerSmall.backGroundLine.setBackgroundColor(it)
+				binding.musicPlayerExpand.root.setBackgroundColor(it)
 				if (activity is MainActivity) {
 					(activity as MainActivity).getRootView().setBackgroundColor(it)
 				}
@@ -169,6 +165,11 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 			intent.putExtra(LyricsActivity.EXTRA_TITLE, it.description.title)
 			(activity!! as BaseActivity).startActivity(intent)
 		}
+	}
+
+	fun setSlidingOffsetAlpha(slideOffset: Float) {
+		binding.musicPlayerSmall.root.alpha = 1f - slideOffset
+		binding.musicPlayerExpand.root.alpha = slideOffset
 	}
 
 	override fun initViewModelBinding() {

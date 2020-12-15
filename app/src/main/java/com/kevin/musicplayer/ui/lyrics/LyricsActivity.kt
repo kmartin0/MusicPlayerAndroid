@@ -5,7 +5,6 @@ import android.view.MenuItem
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMActivity
 import com.kevin.musicplayer.databinding.ActivityLyricsBinding
-import kotlinx.android.synthetic.main.activity_lyrics.*
 
 class LyricsActivity : BaseMVVMActivity<ActivityLyricsBinding, LyricsViewModel>() {
 
@@ -24,7 +23,7 @@ class LyricsActivity : BaseMVVMActivity<ActivityLyricsBinding, LyricsViewModel>(
 	 * Initializes the actionbar
 	 */
 	private fun initActionBar() {
-		setSupportActionBar(toolbarLyrics)
+		setSupportActionBar(binding.toolbarLyrics)
 		supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}

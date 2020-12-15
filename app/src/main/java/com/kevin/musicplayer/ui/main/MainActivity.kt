@@ -6,16 +6,18 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMActivity
 import com.kevin.musicplayer.databinding.ActivityMainBinding
+import com.kevin.musicplayer.ui.player.MusicPlayerFragment
 import com.kevin.musicplayer.ui.tracklist.TrackListFragment
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_music_player.view.*
 
 class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), SlidingUpPanelLayout.PanelSlideListener {
+
+	lateinit var musicPlayerFragment: MusicPlayerFragment
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		init()
+		musicPlayerFragment = supportFragmentManager.findFragmentById(R.id.musicPlayerFragment) as MusicPlayerFragment
 		actionBar?.hide()
 	}
 
@@ -25,8 +27,8 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Sli
 	 */
 	private fun init() {
 		addFragment(R.id.fragmentContainer, TrackListFragment())
-		slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-		slidingLayout.addPanelSlideListener(this)
+		binding.slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+		binding.slidingLayout.addPanelSlideListener(this)
 	}
 
 	/**
@@ -35,8 +37,7 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Sli
 	 * direction.
 	 */
 	override fun onPanelSlide(panel: View?, slideOffset: Float) {
-		musicPlayerFragment.musicPlayerSmall.alpha = 1f - slideOffset
-		musicPlayerFragment.musicPlayerExpand.alpha = slideOffset
+		musicPlayerFragment.setSlidingOffsetAlpha(slideOffset)
 	}
 
 	override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
@@ -53,8 +54,6 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Sli
 		binding.viewModel = viewModel
 	}
 
-	fun getRootView(): ConstraintLayout = clRootMainActivity
+	fun getRootView(): ConstraintLayout = binding.clRootMainActivity
 
-	companion object {
-	}
 }
