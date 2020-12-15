@@ -21,7 +21,7 @@ class BitmapHelper {
 		fun blurBitMap(context: Context, bitmapOriginal: Bitmap): Bitmap {
 			val rs: RenderScript = RenderScript.create(context)
 
-			val input = Allocation.createFromBitmap(rs, bitmapOriginal); //use this constructor for best performance, because it uses USAGE_SHARED mode which reuses memory
+			val input = Allocation.createFromBitmap(rs, bitmapOriginal) //use this constructor for best performance, because it uses USAGE_SHARED mode which reuses memory
 			val output = Allocation.createTyped(rs, input.type)
 			val script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
 			script.setRadius(23f)

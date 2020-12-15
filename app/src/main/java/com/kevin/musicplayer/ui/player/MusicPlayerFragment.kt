@@ -6,9 +6,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseActivity
@@ -21,11 +21,12 @@ import com.kevin.musicplayer.util.BitmapHelper
 import kotlinx.android.synthetic.main.fragment_music_player.*
 import kotlinx.android.synthetic.main.music_player_small.view.*
 
-
+@Suppress("unused")
 class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPlayerViewModel>() {
 
-	override fun onActivityCreated(savedInstanceState: Bundle?) {
-		super.onActivityCreated(savedInstanceState)
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		musicPlayerExpand.alpha = 0f
 		initObservers()
 	}
 
@@ -35,9 +36,9 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	 * Observe [MusicPlayerViewModel.navigateLyricsEvent] and start [LyricsActivity] if the event is called
 	 */
 	private fun initObservers() {
-		viewModel.currentTrack.observe(this, Observer { populateView(it) })
-		viewModel.playBackState.observe(this, Observer { setControlButtons(it?.state) })
-		viewModel.navigateLyricsEvent.observe(this, Observer { navigateToLyrics() })
+		viewModel.currentTrack.observe(viewLifecycleOwner, { populateView(it) })
+		viewModel.playBackState.observe(viewLifecycleOwner, { setControlButtons(it?.state) })
+		viewModel.navigateLyricsEvent.observe(viewLifecycleOwner, { navigateToLyrics() })
 	}
 
 	/**
@@ -61,6 +62,7 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	 * Sets the album icon, background, artist and title for the [metadata].
 	 */
 	private fun setTrackState(metadata: MediaMetadataCompat) {
+		Log.i("TAGZ", "Track state: $metadata")
 		with(metadata) {
 			setBackgroundView(description.mediaUri)
 			setAlbumIconView(description.mediaUri)

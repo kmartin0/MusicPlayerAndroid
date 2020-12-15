@@ -3,9 +3,12 @@ package com.kevin.musicplayer.ui.lyrics
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.kevin.musicplayer.base.BaseViewModel
 import com.kevin.musicplayer.model.Lyrics
 import com.kevin.musicplayer.repository.LyricsRepository
+import kotlinx.coroutines.launch
 
 class LyricsViewModel(application: Application) : BaseViewModel(application) {
 	private val lyricsRepository = LyricsRepository(application.applicationContext)
@@ -17,8 +20,10 @@ class LyricsViewModel(application: Application) : BaseViewModel(application) {
 	 * Gets the lyrics for the [artist] and [title] and stores them in [lyrics]
 	 */
 	fun getLyrics() {
-		if (!artist.value.isNullOrEmpty() && !title.value.isNullOrEmpty()) {
-			lyrics = lyricsRepository.getLyrics(artist.value!!, title.value!!)
+		viewModelScope.launch {
+			if (!artist.value.isNullOrEmpty() && !title.value.isNullOrEmpty()) {
+				lyrics = lyricsRepository.getLyrics(artist.value!!, title.value!!).asLiveData()
+			}
 		}
 	}
 

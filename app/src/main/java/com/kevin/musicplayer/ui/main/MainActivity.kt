@@ -9,13 +9,14 @@ import com.kevin.musicplayer.databinding.ActivityMainBinding
 import com.kevin.musicplayer.ui.tracklist.TrackListFragment
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_music_player.*
+import kotlinx.android.synthetic.main.fragment_music_player.view.*
 
 class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), SlidingUpPanelLayout.PanelSlideListener {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-			init()
+		init()
+		actionBar?.hide()
 	}
 
 	/**
@@ -24,7 +25,6 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Sli
 	 */
 	private fun init() {
 		addFragment(R.id.fragmentContainer, TrackListFragment())
-		musicPlayerFragment.musicPlayerExpand.alpha = 0f
 		slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
 		slidingLayout.addPanelSlideListener(this)
 	}
@@ -56,6 +56,5 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), Sli
 	fun getRootView(): ConstraintLayout = clRootMainActivity
 
 	companion object {
-		private const val PERMISSION_EXTERNAL_STORAGE_REQUEST_CODE = 101
 	}
 }

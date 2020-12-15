@@ -2,14 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.kevin.musicplayer.ui.main.MainViewModel" />
-
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clRootMainActivity"
         android:layout_width="match_parent"
@@ -17,8 +9,7 @@
         android:background="@color/darkGrey"
         android:fitsSystemWindows="true">
 
-        <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
             android:id="@+id/slidingLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -30,20 +21,12 @@
             sothree:umanoPanelHeight="68dp"
             sothree:umanoShadowHeight="4dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent" />
 
-                <FrameLayout
-                    android:id="@+id/fragmentContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <ProgressBar style="@style/progressBar" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/musicPlayerFragment"
                 android:name="com.kevin.musicplayer.ui.player.MusicPlayerFragment"
                 android:layout_width="match_parent"
@@ -54,5 +37,13 @@
 
         </com.sothree.slidinguppanel.SlidingUpPanelLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.kevin.musicplayer.ui.main.MainViewModel" />
+
+    </data>
 </layout>
 

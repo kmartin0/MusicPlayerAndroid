@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.futuremind.recyclerviewfastscroll.SectionTitleProvider
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.util.AlbumArtHelper
+import java.util.*
 
 class TrackListAdapter(private val trackList: List<MediaBrowserCompat.MediaItem>,
 					   private val onTrackClick: (MediaBrowserCompat.MediaItem) -> Unit)
@@ -56,7 +57,7 @@ class TrackListAdapter(private val trackList: List<MediaBrowserCompat.MediaItem>
 
 	override fun getSectionTitle(position: Int): String? {
 		val title = trackList[position].description.title?.toString()
-		return if (title != null) title.toUpperCase()[0].toString() else null
+		return if (title != null) title.toUpperCase(Locale.getDefault())[0].toString() else null
 	}
 
 	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

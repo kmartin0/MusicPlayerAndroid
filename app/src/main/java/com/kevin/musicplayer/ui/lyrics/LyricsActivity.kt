@@ -24,9 +24,9 @@ class LyricsActivity : BaseMVVMActivity<ActivityLyricsBinding, LyricsViewModel>(
 	 * Initializes the actionbar
 	 */
 	private fun initActionBar() {
-		setActionBar(toolbarLyrics)
-		actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
-		actionBar?.setDisplayHomeAsUpEnabled(true)
+		setSupportActionBar(toolbarLyrics)
+		supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}
 
 	/**
@@ -44,8 +44,8 @@ class LyricsActivity : BaseMVVMActivity<ActivityLyricsBinding, LyricsViewModel>(
 		}
 	}
 
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-		return when (item?.itemId) {
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
 			android.R.id.home -> {
 				onBackPressed()
 				true
@@ -58,7 +58,6 @@ class LyricsActivity : BaseMVVMActivity<ActivityLyricsBinding, LyricsViewModel>(
 
 	override fun initViewModelBinding() {
 		binding.viewModel = viewModel
-		binding.setLifecycleOwner(this)
 	}
 
 	override fun getVMClass(): Class<LyricsViewModel> = LyricsViewModel::class.java

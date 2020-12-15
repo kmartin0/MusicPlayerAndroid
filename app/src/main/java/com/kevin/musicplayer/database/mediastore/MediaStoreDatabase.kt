@@ -9,7 +9,6 @@ import android.provider.MediaStore
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
-import android.util.Log
 import com.kevin.musicplayer.model.Album
 import com.kevin.musicplayer.model.Artist
 
@@ -88,17 +87,16 @@ class MediaStoreDatabase(private val context: Context) {
 
 		if (albumCursor != null && albumCursor.moveToFirst() && albumCursor.count > 0) {
 			while (!albumCursor.isAfterLast) {
-//				Uri.parse("content://media/external/audio/albumart"),
 				val albumArtUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 					ContentUris.withAppendedId(
 							MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
 							albumCursor.getLong(albumCursor.getColumnIndex(MediaStore.Audio.Albums._ID))
 					)
 				} else {
-					val deprecatedAlbumArt = albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART))
+					@Suppress("DEPRECATION") val deprecatedAlbumArt = albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART))
 					if (deprecatedAlbumArt != null) Uri.parse(deprecatedAlbumArt) else Uri.EMPTY
 				}
-Log.i("TAGZ", albumArtUri.toString())
+
 				val album = Album(
 						albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM)),
 						albumArtUri.toString(),

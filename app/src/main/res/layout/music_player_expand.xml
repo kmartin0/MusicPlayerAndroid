@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.kevin.musicplayer.ui.player.MusicPlayerViewModel" />
-    </data>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/darkGrey"
         android:padding="12dp">
 
         <ImageView
@@ -21,12 +14,86 @@
             android:layout_width="260dp"
             android:layout_height="260dp"
             android:layout_marginTop="50dp"
+            android:contentDescription="@string/album_art"
             android:src="@drawable/ic_disc"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/ivPause"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivPrevious"
+            style="@style/largeControlButton"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="@string/previous"
+            android:onClick="@{ () -> viewModel.skipToPrevious() }"
+            android:src="@drawable/ic_backward"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivPlay"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivPlay"
+            style="@style/largeControlButton"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="@string/play"
+            android:onClick="@{ () -> viewModel.resumeTrack() }"
+            android:src="@drawable/ic_play"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivNext"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivPrevious" />
+
+        <ImageView
+            android:id="@+id/ivNext"
+            style="@style/largeControlButton"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="@string/next"
+            android:onClick="@{ () -> viewModel.skipToNext() }"
+            android:src="@drawable/ic_forward"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivPlay" />
+
+        <ImageView
+            android:id="@+id/ivPause"
+            style="@style/largeControlButton"
+            android:contentDescription="@string/pause"
+            android:onClick="@{ () -> viewModel.pauseTrack() }"
+            android:src="@drawable/ic_pause"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/ivPlay"
+            app:layout_constraintEnd_toEndOf="@+id/ivPlay"
+            app:layout_constraintStart_toStartOf="@+id/ivPlay"
+            app:layout_constraintTop_toTopOf="@+id/ivPlay" />
+
+        <ImageView
+            android:id="@+id/ivLyrics"
+            style="@style/largeControlButton"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/lyrics"
+            android:onClick="@{ () -> viewModel.onLyricsClick() }"
+            android:src="@drawable/ic_lyrics"
+            app:layout_constraintBottom_toTopOf="@+id/ivPause"
+            app:layout_constraintEnd_toEndOf="@+id/ivPause"
+            app:layout_constraintStart_toStartOf="@+id/ivPause"
+            app:layout_constraintTop_toBottomOf="@id/tvArtist" />
+
+        <TextView
+            android:id="@+id/tvArtist"
+            style="@style/largeWhiteText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="@dimen/padding_small"
+            android:layout_marginEnd="20dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTrack" />
 
         <TextView
             android:id="@+id/tvTrack"
@@ -44,73 +111,12 @@
             app:layout_constraintTop_toBottomOf="@id/ivAlbum"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <TextView
-            android:id="@+id/tvArtist"
-            style="@style/largeWhiteText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="@dimen/padding_small"
-            android:layout_marginEnd="20dp"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTrack" />
-
-        <ImageView
-            android:id="@+id/ivPrevious"
-            style="@style/largeControlButton"
-            android:layout_marginBottom="10dp"
-            android:onClick="@{ () -> viewModel.skipToPrevious() }"
-            android:src="@drawable/ic_backward"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ivPlay"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ImageView
-            android:id="@+id/ivPlay"
-            style="@style/largeControlButton"
-            android:layout_marginBottom="10dp"
-            android:onClick="@{ () -> viewModel.resumeTrack() }"
-            android:src="@drawable/ic_play"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ivNext"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/ivPrevious" />
-
-        <ImageView
-            android:id="@+id/ivNext"
-            style="@style/largeControlButton"
-            android:layout_marginBottom="10dp"
-            android:onClick="@{ () -> viewModel.skipToNext() }"
-            android:src="@drawable/ic_forward"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/ivPlay" />
-
-        <ImageView
-            android:id="@+id/ivPause"
-            style="@style/largeControlButton"
-            android:onClick="@{ () -> viewModel.pauseTrack() }"
-            android:src="@drawable/ic_pause"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/ivPlay"
-            app:layout_constraintEnd_toEndOf="@+id/ivPlay"
-            app:layout_constraintStart_toStartOf="@+id/ivPlay"
-            app:layout_constraintTop_toTopOf="@+id/ivPlay" />
-
-        <ImageView
-            android:id="@+id/ivLyrics"
-            style="@style/largeControlButton"
-            android:layout_marginBottom="20dp"
-            android:onClick="@{ () -> viewModel.onLyricsClick() }"
-            android:src="@drawable/ic_lyrics"
-            app:layout_constraintBottom_toTopOf="@+id/ivPause"
-            app:layout_constraintEnd_toEndOf="@+id/ivPause"
-            app:layout_constraintStart_toStartOf="@+id/ivPause"
-            app:layout_constraintTop_toBottomOf="@id/tvArtist" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.kevin.musicplayer.ui.player.MusicPlayerViewModel" />
+    </data>
 </layout>

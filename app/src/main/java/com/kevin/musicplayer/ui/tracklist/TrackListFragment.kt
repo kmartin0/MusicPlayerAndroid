@@ -1,6 +1,5 @@
 package com.kevin.musicplayer.ui.tracklist
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,8 +24,8 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, TrackListVi
 	 * Observe [TrackListViewModel.currentTrack] and update the [trackListAdapter] current track
 	 */
 	private fun initObservers() {
-		viewModel.trackList.observe(this, Observer { onDataSetChanged(it) })
-		viewModel.currentTrack.observe(this, Observer { trackListAdapter.setCurrentTrack(it) })
+		viewModel.trackList.observe(viewLifecycleOwner, { onDataSetChanged(it) })
+		viewModel.currentTrack.observe(viewLifecycleOwner, { trackListAdapter.setCurrentTrack(it) })
 	}
 
 	/**
@@ -34,7 +33,7 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, TrackListVi
 	 */
 	private fun initTrackListRv() {
 		trackListAdapter = TrackListAdapter(songList) { onTrackClicked(it) }
-		rvSongList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
+		rvSongList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		rvSongList.adapter = trackListAdapter
 		fastScroller.setRecyclerView(rvSongList)
 	}

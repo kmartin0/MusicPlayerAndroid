@@ -65,6 +65,7 @@ class MediaStoreHelper {
 			)
 
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+				@Suppress("DEPRECATION")
 				projection = projection.plus(MediaStore.Audio.Albums.ALBUM_ART)
 			}
 

@@ -1,10 +1,9 @@
 package com.kevin.musicplayer.base
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 
 abstract class BaseMVVMActivity<T : ViewDataBinding, V : BaseViewModel> : BaseActivity() {
 	protected lateinit var binding: T
@@ -16,17 +15,9 @@ abstract class BaseMVVMActivity<T : ViewDataBinding, V : BaseViewModel> : BaseAc
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		binding = DataBindingUtil.setContentView(this, getLayoutId())
-		viewModel = ViewModelProviders.of(this).get(getVMClass())
+		viewModel = ViewModelProvider(this).get(getVMClass())
+		binding.lifecycleOwner = this
 		initViewModelBinding()
-	}
-
-	/**
-	 * Display the loading indicator based on the [BaseViewModel.isLoading]
-	 */
-	fun initLoadingObserver() {
-		viewModel.isLoading.observe(this, Observer { isLoading ->
-			if (isLoading != null) showLoading(isLoading) else showLoading(false)
-		})
 	}
 
 	abstract fun initViewModelBinding()

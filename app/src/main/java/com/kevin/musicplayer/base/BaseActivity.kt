@@ -1,14 +1,14 @@
 package com.kevin.musicplayer.base
 
 import android.os.Bundle
-import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import android.view.View
 import android.widget.ProgressBar
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.kevin.musicplayer.R
 
-abstract class BaseActivity : androidx.fragment.app.FragmentActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
 	/**
 	 * Initialize the layout and title
@@ -32,7 +32,7 @@ abstract class BaseActivity : androidx.fragment.app.FragmentActivity() {
 	 * @param containerViewId The container view to where add the fragment.
 	 * @param fragment The fragment to be added.
 	 */
-	fun addFragment(containerViewId: Int, fragment: androidx.fragment.app.Fragment) {
+	fun addFragment(containerViewId: Int, fragment: Fragment) {
 		val fragmentTransaction = supportFragmentManager.beginTransaction()
 		fragmentTransaction.replace(containerViewId, fragment)
 		fragmentTransaction.commit()

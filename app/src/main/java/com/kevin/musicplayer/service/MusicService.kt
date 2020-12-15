@@ -8,15 +8,14 @@ import android.content.IntentFilter
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
-import android.net.Uri
 import android.os.Bundle
-import androidx.core.app.NotificationManagerCompat
 import android.support.v4.media.MediaBrowserCompat
-import androidx.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
+import androidx.media.MediaBrowserServiceCompat
 import com.intentfilter.androidpermissions.PermissionManager
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.repository.MediaStoreRepository
@@ -100,8 +99,8 @@ class MusicService : MediaBrowserServiceCompat() {
 			clientPackageName: String,
 			clientUid: Int,
 			rootHints: Bundle?
-	): MediaBrowserServiceCompat.BrowserRoot {
-		return MediaBrowserServiceCompat.BrowserRoot(MY_MEDIA_ROOT_ID, null)
+	): BrowserRoot {
+		return BrowserRoot(MY_MEDIA_ROOT_ID, null)
 	}
 
 	/**
@@ -109,7 +108,7 @@ class MusicService : MediaBrowserServiceCompat() {
 	 */
 	override fun onLoadChildren(
 			parentMediaId: String,
-			result: MediaBrowserServiceCompat.Result<List<MediaBrowserCompat.MediaItem>>
+			result: Result<List<MediaBrowserCompat.MediaItem>>
 	) {
 		result.detach()
 		val permissionManager = PermissionManager.getInstance(this)

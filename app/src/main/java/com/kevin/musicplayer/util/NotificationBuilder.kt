@@ -7,21 +7,15 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.browse.MediaBrowser
 import android.net.Uri
 import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
-import android.support.v4.media.MediaMetadataCompat
-import androidx.media.app.NotificationCompat.MediaStyle
-import androidx.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
-import android.util.Size
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.media.app.NotificationCompat.MediaStyle
+import androidx.media.session.MediaButtonReceiver
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.ui.main.MainActivity
 
@@ -38,30 +32,30 @@ class NotificationBuilder(private val context: Context) {
 
 	// Pending Intent which calls [PlaybackStateCompat.ACTION_STOP]
 	private val stopPendingIntent =
-			androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_STOP)
+			MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_STOP)
 
 	// Action which calls [PlaybackStateCompat.ACTION_PAUSE]
 	private val pauseAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_pause,
-			"Pause", androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent(
+			context.getString(R.string.pause), MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_PAUSE))
 
 	// Action which calls [PlaybackStateCompat.ACTION_PLAY]
 	private val playAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_play,
-			"Pause", androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent(
+			context.getString(R.string.play), MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_PLAY))
 
 	// Action which calls [PlaybackStateCompat.ACTION_SKIP_TO_NEXT]
 	private val skipToNextAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_next,
-			"Next", androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent(
+			context.getString(R.string.next), MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_SKIP_TO_NEXT))
 
 	// Action which calls [PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS]
 	private val skipToPreviousAction = NotificationCompat.Action(
 			android.R.drawable.ic_media_previous,
-			"Next", androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent(
+			context.getString(R.string.previous), MediaButtonReceiver.buildMediaButtonPendingIntent(
 			context, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS))
 
 	/**
@@ -88,6 +82,8 @@ class NotificationBuilder(private val context: Context) {
 		when (playbackState.state) {
 			PlaybackStateCompat.STATE_PAUSED -> builder.addAction(playAction)
 			PlaybackStateCompat.STATE_PLAYING -> builder.addAction(pauseAction)
+			else -> { /* Do nothing */
+			}
 		}
 		builder.addAction(skipToNextAction)
 
@@ -103,7 +99,7 @@ class NotificationBuilder(private val context: Context) {
 				.build()
 	}
 
-	private fun getLargeIcon(mediaContentUri: Uri?, context: Context): Bitmap? {
+	private fun getLargeIcon(mediaContentUri: Uri?, context: Context): Bitmap {
 		return AlbumArtHelper.getAlbumArtBitmap(mediaContentUri, context)
 	}
 

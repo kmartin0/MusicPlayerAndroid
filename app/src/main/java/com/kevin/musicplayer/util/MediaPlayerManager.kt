@@ -1,10 +1,8 @@
 package com.kevin.musicplayer.util
 
-import android.content.ContentResolver
 import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
-import android.util.Log
 
 class MediaPlayerManager : MediaPlayer.OnCompletionListener {
 	private var mediaPlayer: MediaPlayer? = null

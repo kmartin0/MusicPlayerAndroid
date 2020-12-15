@@ -15,7 +15,7 @@
         android:background="@color/darkGrey"
         android:fitsSystemWindows="true">
 
-        <Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarLyrics"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -44,7 +44,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
         <ScrollView
             android:layout_width="match_parent"
