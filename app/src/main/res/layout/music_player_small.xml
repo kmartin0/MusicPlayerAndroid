@@ -12,16 +12,23 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
-        android:layout_height="68dp">
+        android:layout_height="68dp"
+        android:background="@color/darkGrey">
 
         <View
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/backGroundLine"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="2dp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/backGroundLine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:padding="12dp">
 
             <ImageView

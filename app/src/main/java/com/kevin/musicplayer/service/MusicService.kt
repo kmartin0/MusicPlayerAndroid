@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Bundle
 import androidx.core.app.NotificationManagerCompat
 import android.support.v4.media.MediaBrowserCompat
@@ -149,7 +150,7 @@ class MusicService : MediaBrowserServiceCompat() {
 					if (mediaSession.controller.metadata?.description?.mediaId == toPlay.mediaId) { // Resume the current track
 						MediaPlayerManager.getInstance().resume()
 					} else { // Start the current track
-						MediaPlayerManager.getInstance().playMediaItem(toPlay.mediaUri.toString()) { onSkipToNext() }
+						MediaPlayerManager.getInstance().playMediaItem(toPlay.mediaUri!!, applicationContext) { onSkipToNext() }
 						mediaSession.setMetadata(MediaHelper.descriptionCompatToMetadataCompat(toPlay))
 					}
 

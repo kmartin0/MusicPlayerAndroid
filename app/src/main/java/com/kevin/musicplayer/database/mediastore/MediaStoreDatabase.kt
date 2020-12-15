@@ -1,14 +1,18 @@
 package com.kevin.musicplayer.database.mediastore
 
+import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
+import android.util.Log
 import com.kevin.musicplayer.model.Album
 import com.kevin.musicplayer.model.Artist
+
 
 class MediaStoreDatabase(private val context: Context) {
 
@@ -38,7 +42,10 @@ class MediaStoreDatabase(private val context: Context) {
 						.setSubtitle(artist?.name)
 						.setDescription(album?.title)
 						.setExtras(extras)
-						.setMediaUri(Uri.parse(tracksCursor.getString(tracksCursor.getColumnIndex(MediaStore.Audio.Media.DATA))))
+						.setMediaUri(ContentUris.withAppendedId(
+								MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+								tracksCursor.getLong(tracksCursor.getColumnIndex(MediaStore.Audio.Media._ID))
+						))
 						.build()
 
 				trackList.add(MediaBrowserCompat.MediaItem(desc, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
@@ -81,9 +88,20 @@ class MediaStoreDatabase(private val context: Context) {
 
 		if (albumCursor != null && albumCursor.moveToFirst() && albumCursor.count > 0) {
 			while (!albumCursor.isAfterLast) {
+//				Uri.parse("content://media/external/audio/albumart"),
+				val albumArtUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+					ContentUris.withAppendedId(
+							MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+							albumCursor.getLong(albumCursor.getColumnIndex(MediaStore.Audio.Albums._ID))
+					)
+				} else {
+					val deprecatedAlbumArt = albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART))
+					if (deprecatedAlbumArt != null) Uri.parse(deprecatedAlbumArt) else Uri.EMPTY
+				}
+Log.i("TAGZ", albumArtUri.toString())
 				val album = Album(
 						albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM)),
-						albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART)),
+						albumArtUri.toString(),
 						albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums._ID)),
 						albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST)),
 						albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR)),

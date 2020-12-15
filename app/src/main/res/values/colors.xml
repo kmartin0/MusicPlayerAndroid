@@ -10,4 +10,6 @@
     <color name="transparent">#00ffffff</color>
     <color name="blackTransparent50">#32000000</color>
     <color name="blackTransparent80">#50000000</color>
+
+    <color name="whiteTransparent50">#1AFFFFFF</color>
 </resources>

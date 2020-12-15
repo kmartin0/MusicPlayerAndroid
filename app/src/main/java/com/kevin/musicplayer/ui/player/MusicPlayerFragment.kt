@@ -1,14 +1,14 @@
 package com.kevin.musicplayer.ui.player
 
-import androidx.lifecycle.Observer
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseActivity
@@ -16,6 +16,7 @@ import com.kevin.musicplayer.base.BaseMVVMFragment
 import com.kevin.musicplayer.databinding.FragmentMusicPlayerBinding
 import com.kevin.musicplayer.ui.lyrics.LyricsActivity
 import com.kevin.musicplayer.ui.main.MainActivity
+import com.kevin.musicplayer.util.AlbumArtHelper
 import com.kevin.musicplayer.util.BitmapHelper
 import kotlinx.android.synthetic.main.fragment_music_player.*
 import kotlinx.android.synthetic.main.music_player_small.view.*
@@ -60,11 +61,12 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 	 * Sets the album icon, background, artist and title for the [metadata].
 	 */
 	private fun setTrackState(metadata: MediaMetadataCompat) {
-		val albumArtUri = metadata.bundle.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
-		setBackgroundView(albumArtUri)
-		setAlbumIconView(albumArtUri)
-		setArtistView(metadata.description.description.toString())
-		setTitleView(metadata.description.title.toString())
+		with(metadata) {
+			setBackgroundView(description.mediaUri)
+			setAlbumIconView(description.mediaUri)
+			setArtistView(description.description.toString())
+			setTitleView(description.title.toString())
+		}
 	}
 
 	/**
@@ -119,41 +121,39 @@ class MusicPlayerFragment : BaseMVVMFragment<FragmentMusicPlayerBinding, MusicPl
 
 	/**
 	 * Loads the album art into the small and large music player
-	 * If [albumArt] is null the album placeholder will be displayed
 	 *
-	 * 	@param albumArt Location of the album art
+	 * 	@param mediaContentUri Location of the media item
 	 */
-	private fun setAlbumIconView(albumArt: String?) {
-		if (albumArt.isNullOrEmpty()) {
-			Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerSmall.ivAlbum)
-			Glide.with(context!!).load(R.drawable.ic_disc).into(musicPlayerExpand.ivAlbum)
-		} else {
-			Glide.with(context!!).load(albumArt).into(musicPlayerSmall.ivAlbum)
-			Glide.with(context!!).load(albumArt).into(musicPlayerExpand.ivAlbum)
+	private fun setAlbumIconView(mediaContentUri: Uri?) {
+		with(AlbumArtHelper.getAlbumArtBitmap(mediaContentUri, requireContext())) {
+			Glide.with(requireContext()).load(this).into(musicPlayerSmall.ivAlbum)
+			Glide.with(requireContext()).load(this).into(musicPlayerExpand.ivAlbum)
 		}
 	}
 
 	/**
-	 * Sets the background for the parent activity and the fragment to DarkGrey if [albumArt] is null.
-	 * If not null the background will be a blurred image of the [albumArt]
+	 * Sets the background for the parent activity and the fragment to DarkGrey if [mediaContentUri] is null.
+	 * If not null the background will be a blurred image of the [mediaContentUri] album art.
 	 *
-	 * @param albumArt Location of the album art
+	 * @param mediaContentUri Location of the media item
 	 */
-	private fun setBackgroundView(albumArt: String?) {
-		if (albumArt.isNullOrEmpty()) {
-			ContextCompat.getColor(context!!, R.color.darkGrey).also {
+	private fun setBackgroundView(mediaContentUri: Uri?) {
+		if (mediaContentUri != null) {
+			BitmapHelper.blurAlbumArt(mediaContentUri, requireContext()).also {
+				musicPlayerExpand.background = BitmapDrawable(resources, it)
+				musicPlayerSmall.backGroundLine.background = BitmapHelper.gradientFromBitmap(it)
+				(activity as? MainActivity)?.getRootView()?.background = BitmapDrawable(resources, it)
+			}
+		} else { // If no media is played set all backgrounds to dark grey.
+			ContextCompat.getColor(requireContext(), R.color.darkGrey).also {
 				view?.setBackgroundColor(it)
 				musicPlayerSmall.backGroundLine.setBackgroundColor(it)
+				musicPlayerExpand.setBackgroundColor(it)
 				if (activity is MainActivity) {
 					(activity as MainActivity).getRootView().setBackgroundColor(it)
 				}
 			}
-		} else {
-			BitmapHelper.blurAlbumArt(albumArt, context!!).also {
-				view?.background = BitmapDrawable(resources, it)
-				musicPlayerSmall.backGroundLine.background = BitmapHelper.gradientFromBitmap(it)
-				(activity as? MainActivity)?.getRootView()?.background = BitmapDrawable(resources, it)
-			}
+
 		}
 	}
 

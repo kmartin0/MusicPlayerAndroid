@@ -1,6 +1,10 @@
 package com.kevin.musicplayer.util
 
+import android.content.ContentResolver
+import android.content.Context
 import android.media.MediaPlayer
+import android.net.Uri
+import android.util.Log
 
 class MediaPlayerManager : MediaPlayer.OnCompletionListener {
 	private var mediaPlayer: MediaPlayer? = null
@@ -20,9 +24,9 @@ class MediaPlayerManager : MediaPlayer.OnCompletionListener {
 	/**
 	 * Create a new [MediaPlayer] and play the [trackUri]
 	 */
-	fun playMediaItem(trackUri: String, onCompletionCallback: () -> Unit) {
+	fun playMediaItem(trackUri: Uri, context: Context, onCompletionCallback: () -> Unit) {
 		createMediaPlayer(onCompletionCallback)
-		mediaPlayer!!.setDataSource(trackUri)
+		mediaPlayer!!.setDataSource(context, trackUri)
 		mediaPlayer!!.prepare()
 		mediaPlayer!!.start()
 	}

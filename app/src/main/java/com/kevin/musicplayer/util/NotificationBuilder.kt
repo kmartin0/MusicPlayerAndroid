@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.browse.MediaBrowser
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -18,6 +20,8 @@ import androidx.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
+import android.util.Size
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.ui.main.MainActivity
 
@@ -71,7 +75,6 @@ class NotificationBuilder(private val context: Context) {
 		val controller = MediaControllerCompat(context, sessionToken)
 		val description = controller.metadata.description
 		val playbackState = controller.playbackState
-		val albumUri = controller.metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
 
 		val builder = NotificationCompat.Builder(context, NOW_PLAYING_CHANNEL)
 
@@ -94,16 +97,14 @@ class NotificationBuilder(private val context: Context) {
 				.setDeleteIntent(stopPendingIntent)
 				.setOnlyAlertOnce(true)
 				.setSmallIcon(R.drawable.ic_play)
-				.setLargeIcon(getLargeIcon(albumUri))
+				.setLargeIcon(getLargeIcon(description.mediaUri, context))
 				.setStyle(mediaStyle)
 				.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 				.build()
 	}
 
-	private fun getLargeIcon(albumUri: String?): Bitmap {
-		return if (albumUri != null)
-			BitmapFactory.decodeFile(albumUri)
-		else BitmapHelper.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_disc)!!)
+	private fun getLargeIcon(mediaContentUri: Uri?, context: Context): Bitmap? {
+		return AlbumArtHelper.getAlbumArtBitmap(mediaContentUri, context)
 	}
 
 	private fun createContentIntent(): PendingIntent {

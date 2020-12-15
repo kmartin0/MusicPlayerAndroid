@@ -1,12 +1,8 @@
 package com.kevin.musicplayer.ui.main
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.kevin.musicplayer.R
 import com.kevin.musicplayer.base.BaseMVVMActivity
 import com.kevin.musicplayer.databinding.ActivityMainBinding
@@ -14,7 +10,6 @@ import com.kevin.musicplayer.ui.tracklist.TrackListFragment
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_music_player.*
-
 
 class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainViewModel>(), SlidingUpPanelLayout.PanelSlideListener {
 
