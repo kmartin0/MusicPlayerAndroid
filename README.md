@@ -21,8 +21,8 @@ Basic Music player Application for Android made during the course Mobile Applica
 
 ## Screenshots
 
-![Home empty queue screenshot](https://github.com/kmartin0/assets/blob/master/android-music-player/android-music-player_empty_queue.jpg?raw=true)
-![Home player playing screenshot](https://github.com/kmartin0/assets/blob/master/android-music-player/android-music-player_home_playing.jpg?raw=true)
-![Player screenshot](https://github.com/kmartin0/assets/blob/master/android-music-player/android-music-player_player.jpg?raw=true)
-![Lyrics screenshot](https://github.com/kmartin0/assets/blob/master/android-music-player/android-music-player_lyrics.jpg?raw=true)
-![Widget screenshot](https://github.com/kmartin0/assets/blob/master/android-music-player/android-music-player_widget.jpg?raw=true)
+![Home empty queue screenshot](https://github.com/kmartin0/assets/blob/master/android-music-player/android-music-player_empty_queue.png?raw=true)
+![Home player playing screenshot](https://github.com/kmartin0/assets/blob/master/android-music-player/android-music-player_home_playing.png?raw=true)
+![Player screenshot](https://github.com/kmartin0/assets/blob/master/android-music-player/android-music-player_player.png?raw=true)
+![Lyrics screenshot](https://github.com/kmartin0/assets/blob/master/android-music-player/android-music-player_lyrics.png?raw=true)
+![Widget screenshot](https://github.com/kmartin0/assets/blob/master/android-music-player/android-music-player_widget.png?raw=true)
