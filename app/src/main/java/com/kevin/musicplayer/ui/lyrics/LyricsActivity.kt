@@ -38,7 +38,7 @@ class LyricsActivity : BaseMVVMActivity<ActivityLyricsBinding, LyricsViewModel>(
 			val title = it.getString(EXTRA_TITLE)
 			if (artist != null && title != null) {
 				viewModel.setData(artist, title)
-				viewModel.getLyrics()
+				viewModel.getTrackLyrics()
 			}
 		}
 	}

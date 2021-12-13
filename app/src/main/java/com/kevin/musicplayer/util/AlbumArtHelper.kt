@@ -21,7 +21,7 @@ class AlbumArtHelper {
 
 					val embeddedPicture = mediaMetadataRetriever.embeddedPicture
 
-					albumArt = BitmapFactory.decodeByteArray(embeddedPicture, 0, embeddedPicture.size, options)
+					albumArt = BitmapFactory.decodeByteArray(embeddedPicture, 0, embeddedPicture!!.size, options)
 				} catch (ex: Exception) {
 					// Do nothing when an exception occurs, will return the default disc image.
 				}

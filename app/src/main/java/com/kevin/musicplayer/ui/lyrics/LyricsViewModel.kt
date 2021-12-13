@@ -19,7 +19,7 @@ class LyricsViewModel(application: Application) : BaseViewModel(application) {
 	/**
 	 * Gets the lyrics for the [artist] and [title] and stores them in [lyrics]
 	 */
-	fun getLyrics() {
+	fun getTrackLyrics() {
 		viewModelScope.launch {
 			if (!artist.value.isNullOrEmpty() && !title.value.isNullOrEmpty()) {
 				lyrics = lyricsRepository.getLyrics(artist.value!!, title.value!!).asLiveData()
