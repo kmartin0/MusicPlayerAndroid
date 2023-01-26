@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
@@ -112,19 +113,36 @@ class MusicService : MediaBrowserServiceCompat() {
 	) {
 		result.detach()
 		val permissionManager = PermissionManager.getInstance(this)
-		permissionManager.checkPermissions(singleton(Manifest.permission.READ_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
+		if (Build.VERSION.SDK_INT >= 33) {
+			permissionManager.checkPermissions(singleton(Manifest.permission.READ_MEDIA_AUDIO), object : PermissionManager.PermissionRequestListener {
 
-			override fun onPermissionGranted() {
-				result.sendResult(
+				override fun onPermissionGranted() {
+					result.sendResult(
 						if (parentMediaId == MY_MEDIA_ROOT_ID) mediaStoreRepository.getAllTracks()
 						else null)
-			}
+				}
 
-			override fun onPermissionDenied() {
-				Toast.makeText(applicationContext, getString(R.string.store_permission_denied_msg), Toast.LENGTH_SHORT).show()
-				result.sendResult(null)
-			}
-		})
+				override fun onPermissionDenied() {
+					Toast.makeText(applicationContext, getString(R.string.store_permission_denied_msg), Toast.LENGTH_SHORT).show()
+					result.sendResult(null)
+				}
+			})
+		} else {
+			permissionManager.checkPermissions(singleton(Manifest.permission.READ_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
+
+				override fun onPermissionGranted() {
+					result.sendResult(
+						if (parentMediaId == MY_MEDIA_ROOT_ID) mediaStoreRepository.getAllTracks()
+						else null)
+				}
+
+				override fun onPermissionDenied() {
+					Toast.makeText(applicationContext, getString(R.string.store_permission_denied_msg), Toast.LENGTH_SHORT).show()
+					result.sendResult(null)
+				}
+			})
+		}
+
 	}
 
 	/**

@@ -107,7 +107,7 @@ class NotificationBuilder(private val context: Context) {
 		val openUI = Intent(context, MainActivity::class.java)
 		openUI.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
 		return PendingIntent.getActivity(
-				context, REQUEST_CODE, openUI, PendingIntent.FLAG_CANCEL_CURRENT)
+				context, REQUEST_CODE, openUI, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT)
 	}
 
 	private fun shouldCreateNowPlayingChannel() =
