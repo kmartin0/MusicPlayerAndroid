@@ -9,12 +9,6 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="StyledScrollerTextAppearance" parent="@android:style/TextAppearance">
-        <item name="android:textSize">24sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
     <style name="smallControlButton">
         <item name="android:layout_width">@dimen/control_icon_medium_large</item>
         <item name="android:layout_height">@dimen/control_icon_medium_large</item>

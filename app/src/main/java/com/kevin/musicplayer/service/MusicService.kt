@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ServiceInfo
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
@@ -172,7 +173,7 @@ class MusicService : MediaBrowserServiceCompat() {
 					}
 
 					mediaSession.setPlaybackState(PlaybackStateHelper.STATE_PLAYING)
-					startForeground(NOW_PLAYING_NOTIFICATION, notificationBuilder.buildNotification(mediaSession.sessionToken))
+					startForeground(NOW_PLAYING_NOTIFICATION, notificationBuilder.buildNotification(mediaSession.sessionToken), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
 				}
 			}
 		}

@@ -8,7 +8,7 @@ import com.kevin.musicplayer.util.SingleLiveEvent
 
 class MusicPlayerViewModel(application: Application) : BaseViewModel(application) {
 
-	val navigateLyricsEvent = SingleLiveEvent<Any>()
+	val navigateLyricsEvent = SingleLiveEvent<Any?>()
 	private val mediaSessionConnection = MediaSessionConnection.getInstance(application.applicationContext)
 	val currentTrack = mediaSessionConnection.currentTrack
 	val playBackState = mediaSessionConnection.playBackState

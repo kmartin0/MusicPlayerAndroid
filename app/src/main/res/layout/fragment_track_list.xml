@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <variable
             name="viewModel"
             type="com.kevin.musicplayer.ui.tracklist.TrackListViewModel" />
@@ -12,26 +13,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.l4digital.fastscroll.FastScrollRecyclerView
             android:id="@+id/rvSongList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:clipToPadding="false"
+            app:bubbleColor="#5e64ce"
+            app:bubbleSize="small"
+            app:bubbleTextColor="#FFFFFF"
+            app:bubbleTextSize="24sp"
+            app:handleColor="#8f93d1"
+            app:hideScrollbar="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.futuremind.recyclerviewfastscroll.FastScroller
-            android:id="@+id/fastScroller"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:fastscroll__bubbleColor="#5e64ce"
-            app:fastscroll__bubbleTextAppearance="@style/StyledScrollerTextAppearance"
-            app:fastscroll__handleColor="#8f93d1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

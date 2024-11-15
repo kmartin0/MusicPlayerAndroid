@@ -1,17 +1,16 @@
-apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-parcelize'
-
-apply plugin: 'kotlin-kapt'
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.kapt)
+    alias(libs.plugins.jetbrains.kotlin.parcelize)
+}
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 35
     defaultConfig {
         applicationId "com.kevin.musicplayer"
-        minSdkVersion 26
-        targetSdkVersion 33
+        minSdkVersion 29
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
@@ -38,68 +37,72 @@ android {
         renderscriptSupportModeEnabled true
     }
 
+    namespace 'com.kevin.musicplayer'
+
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.media:media:1.6.0'
+
+    // Kotlin
+    implementation libs.androidx.core.ktx
+
+    // Appcompat
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.recyclerview
+
+    // Testing
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.ext.junit
+    androidTestImplementation libs.androidx.espresso.core
+
+    // Media
+    implementation libs.androidx.media
 
     // Support Design
-    implementation 'com.google.android.material:material:1.2.1'
-
-    // RecyclerView
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-
-    // Constraint Layout
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation libs.material
+    implementation libs.androidx.legacy.support
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation libs.bumptech.glide
+    kapt libs.bumptech.glide.compiler
 
     // Extensions = ViewModel + LiveData
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+    implementation libs.jetbrains.coroutines
 
     // Room
-    implementation "androidx.room:room-runtime:2.4.0-beta01"
-    kapt "androidx.room:room-compiler:2.4.0-beta01"
-    implementation "androidx.room:room-ktx:2.4.0-beta01"
+    implementation libs.androidx.room.runtime
+    kapt libs.androidx.room.compiler
+    implementation libs.androidx.room.ktx
 
     //Rx
-    implementation "io.reactivex.rxjava2:rxjava:2.2.10"
-    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation libs.reactivex.rxjava2.rxandroid
+    implementation libs.reactivex.rxjava2.rxjava
 
     // Retrofit
-    implementation "com.squareup.retrofit2:retrofit:2.6.0"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.5.0"
-    implementation "com.squareup.retrofit2:converter-gson:2.6.0"
+    implementation libs.squareup.retrofit
+    implementation libs.squareup.retrofit.adapter.rxjava2
+    implementation libs.squareup.retrofit.converter.gson
 
     //Http logging
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
+    implementation libs.squareup.logging.interceptor
 
     // Sliding up panel
-    implementation 'com.sothree.slidinguppanel:library:3.4.0'
+    implementation libs.sothree.slidinguppanel
 
     // Fast Scroll
-    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
 
     // Permission
-    implementation 'com.intentfilter:android-permissions:0.1.7'
+    implementation libs.intentfilter.android.permissions
 
     // Palette
-//    implementation 'com.android.support:palette-v7:28.0.0'
-    implementation 'androidx.palette:palette-ktx:1.0.0'
+    implementation libs.androidx.palette.ktx
+
+    // Fastscroll
+    implementation libs.l4digital.fastscroll
 
 }

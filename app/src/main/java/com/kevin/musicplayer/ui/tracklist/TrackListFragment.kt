@@ -34,7 +34,7 @@ class TrackListFragment : BaseMVVMFragment<FragmentTrackListBinding, TrackListVi
 		trackListAdapter = TrackListAdapter(songList) { onTrackClicked(it) }
 		binding.rvSongList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		binding.rvSongList.adapter = trackListAdapter
-		binding.fastScroller.setRecyclerView(binding.rvSongList)
+//		binding.fastScroller.setRecyclerView(binding.rvSongList)
 	}
 
 	/**
